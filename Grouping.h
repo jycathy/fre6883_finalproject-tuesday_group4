@@ -5,8 +5,9 @@
 #include <vector>
 #include <string>
 
+using namespace std;
 struct Stock {
-    std::string ticker;
+    string ticker;
     double surprise_percentage;
 };
 

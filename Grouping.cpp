@@ -5,25 +5,25 @@
 #include "Grouping.h"
 #include <algorithm>
 #include <string>
-
+using namespace std;
 void StockGroups::groupStocksBySurprisePercentage(const std::string& filename) {
-    std::ifstream file(filename);
-    std::string line;
-    std::getline(file, line);
-    std::vector<Stock> stocks;
+    ifstream file(filename);
+    string line;
+    getline(file, line);
+    vector<Stock> stocks;
 
-    while (std::getline(file, line)) {
-        std::stringstream ss(line);
-        std::string token;
+    while (getline(file, line)) {
+        stringstream ss(line);
+        string token;
         Stock stock;
 
-        std::getline(ss, stock.ticker, ',');
-        std::getline(ss, token, ',');
-        std::getline(ss, token, ',');
-        std::getline(ss, token, ','); 
-        std::getline(ss, token, ',');
-        std::getline(ss, token, ','); 
-        std::getline(ss, token, ',');
+        getline(ss, stock.ticker, ',');
+        getline(ss, token, ',');
+        getline(ss, token, ',');
+        getline(ss, token, ','); 
+        getline(ss, token, ',');
+        getline(ss, token, ','); 
+        getline(ss, token, ',');
         stock.surprise_percentage = std::stod(token);
 
         stocks.push_back(stock);
@@ -31,7 +31,7 @@ void StockGroups::groupStocksBySurprisePercentage(const std::string& filename) {
 
     file.close();
 
-    std::sort(stocks.begin(), stocks.end(), [](const Stock& a, const Stock& b) {
+    sort(stocks.begin(), stocks.end(), [](const Stock& a, const Stock& b) {
         return a.surprise_percentage > b.surprise_percentage;
     });
 
@@ -45,7 +45,7 @@ void StockGroups::groupStocksBySurprisePercentage(const std::string& filename) {
 
 
 void StockGroups::printGroup(int groupNumber) const {
-    const std::vector<Stock>* group;
+    const vector<Stock>* group;
 
     if (groupNumber == 1) {
         group = &missEstimateGroup;
@@ -56,11 +56,11 @@ void StockGroups::printGroup(int groupNumber) const {
     }
 
     for (const auto& stock : *group) {
-        std::cout << stock.ticker << std::endl;
+        cout << stock.ticker << std::endl;
     }
 }
 
-std::vector<std::string> StockGroups::getGroup(int groupNumber) const {
+vector<std::string> StockGroups::getGroup(int groupNumber) const {
     const std::vector<Stock>* group;
 
     if (groupNumber == 1) {
@@ -71,13 +71,12 @@ std::vector<std::string> StockGroups::getGroup(int groupNumber) const {
         group = &beatEstimateGroup;
     }
 
-    std::vector<std::string> tickers;
+    vector<std::string> tickers;
     for (const auto& stock : *group) {
         tickers.push_back(stock.ticker);
     }
     return tickers;
 }
-
 
 
 

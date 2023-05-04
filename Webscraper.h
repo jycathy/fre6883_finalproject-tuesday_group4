@@ -11,7 +11,7 @@
 
 
 using namespace std;
-namespace fre{
+namespace project{
     class Webscraper{
         private:
         string startdate;
@@ -27,5 +27,5 @@ namespace fre{
             void getIWVData();
         
     };
-
 }
+

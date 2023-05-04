@@ -11,7 +11,7 @@
 #include "Webscraper.h"
 
 using namespace std;
-
+namespace project{
 StockGroups groups;
 
 const char* cIWB3000SymbolFile = "Russell_3000_component_stocks.csv";
@@ -212,25 +212,25 @@ void Webscraper::getIWVData()
 		string end_date = "2023-03-31";
 		string api_token = "644dd3c5307e07.87085785"; 
 		
-			struct MemoryStruct data;
-			data.memory = NULL;
-			data.size = 0;
+		struct MemoryStruct data;
+		data.memory = NULL;
+		data.size = 0;
 
-			string symbol = "IWV";
-			string url_request = url_common + symbol + ".US?" + "from=" + start_date + "&to=" + end_date + "&api_token=" + api_token + "&period=d";
-			curl_easy_setopt(handle, CURLOPT_URL, url_request.c_str());
+		string symbol = "IWV";
+		string url_request = url_common + symbol + ".US?" + "from=" + start_date + "&to=" + end_date + "&api_token=" + api_token + "&period=d";
+		curl_easy_setopt(handle, CURLOPT_URL, url_request.c_str());
 
-			//adding a user agent
-			curl_easy_setopt(handle, CURLOPT_USERAGENT, "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:74.0) Gecko/20100101 Firefox/74.0");
-			curl_easy_setopt(handle, CURLOPT_SSL_VERIFYPEER, 0);
-			curl_easy_setopt(handle, CURLOPT_SSL_VERIFYHOST, 0);
-			fp = fopen(resultfilename, "ab");
-			fprintf(fp, "%s\n", symbol.c_str());
-			curl_easy_setopt(handle, CURLOPT_WRITEFUNCTION, write_data);
-			curl_easy_setopt(handle, CURLOPT_WRITEDATA, fp);
-			result = curl_easy_perform(handle);
-			fprintf(fp, "%c", '\n');
-			fclose(fp);
+		//adding a user agent
+		curl_easy_setopt(handle, CURLOPT_USERAGENT, "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:74.0) Gecko/20100101 Firefox/74.0");
+		curl_easy_setopt(handle, CURLOPT_SSL_VERIFYPEER, 0);
+		curl_easy_setopt(handle, CURLOPT_SSL_VERIFYHOST, 0);
+		fp = fopen(resultfilename, "ab");
+		fprintf(fp, "%s\n", symbol.c_str());
+		curl_easy_setopt(handle, CURLOPT_WRITEFUNCTION, write_data);
+		curl_easy_setopt(handle, CURLOPT_WRITEDATA, fp);
+		result = curl_easy_perform(handle);
+		fprintf(fp, "%c", '\n');
+		fclose(fp);
 
 			// check for errors 
 			if (result != CURLE_OK) {
@@ -273,7 +273,7 @@ void Webscraper::getIWVData()
 			
 			free(data.memory);
 			data.size = 0;
-		}
+		
 
 	}
 	else
@@ -289,4 +289,6 @@ void Webscraper::getIWVData()
 	curl_global_cleanup();
 
     
+}
+
 }

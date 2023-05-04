@@ -18,11 +18,11 @@ void StockGroups::groupStocksBySurprisePercentage(const std::string& filename) {
         Stock stock;
 
         std::getline(ss, stock.ticker, ',');
-        std::getline(ss, token, ','); // Skip date
-        std::getline(ss, token, ','); // Skip period_ending
-        std::getline(ss, token, ','); // Skip estimate
-        std::getline(ss, token, ','); // Skip reported
-        std::getline(ss, token, ','); // Skip surprise
+        std::getline(ss, token, ',');
+        std::getline(ss, token, ',');
+        std::getline(ss, token, ','); 
+        std::getline(ss, token, ',');
+        std::getline(ss, token, ','); 
         std::getline(ss, token, ',');
         stock.surprise_percentage = std::stod(token);
 
@@ -78,18 +78,7 @@ std::vector<std::string> StockGroups::getGroup(int groupNumber) const {
     return tickers;
 }
 
-int main() {
-    std::string filename = "Russell3000EarningsAnnouncements.csv";
-    StockGroups stockGroups;
 
-    stockGroups.groupStocksBySurprisePercentage(filename);
-    
-    std::cout << "Miss Estimate Group:" << std::endl;
-    stockGroups.printGroup(2);
-    std::cout << std::endl;
-
-    return 0;
-}
 
 
 

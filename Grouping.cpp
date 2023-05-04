@@ -18,11 +18,11 @@ void StockGroups::groupStocksBySurprisePercentage(const std::string& filename) {
         Stock stock;
 
         std::getline(ss, stock.ticker, ',');
-        std::getline(ss, token, ',');
-        std::getline(ss, token, ',');
-        std::getline(ss, token, ',');
-        std::getline(ss, token, ','); 
-        std::getline(ss, token, ',');
+        std::getline(ss, token, ','); // Skip date
+        std::getline(ss, token, ','); // Skip period_ending
+        std::getline(ss, token, ','); // Skip estimate
+        std::getline(ss, token, ','); // Skip reported
+        std::getline(ss, token, ','); // Skip surprise
         std::getline(ss, token, ',');
         stock.surprise_percentage = std::stod(token);
 
@@ -43,6 +43,7 @@ void StockGroups::groupStocksBySurprisePercentage(const std::string& filename) {
     beatEstimateGroup.assign(stocks.begin() + group_size * 2, stocks.end());
 }
 
+
 void StockGroups::printGroup(int groupNumber) const {
     const std::vector<Stock>* group;
 
@@ -59,16 +60,36 @@ void StockGroups::printGroup(int groupNumber) const {
     }
 }
 
-const std::vector<Stock>& StockGroups::getGroup(int groupNumber) const {
+std::vector<std::string> StockGroups::getGroup(int groupNumber) const {
+    const std::vector<Stock>* group;
+
     if (groupNumber == 1) {
-        return missEstimateGroup;
+        group = &missEstimateGroup;
     } else if (groupNumber == 2) {
-        return meetEstimateGroup;
+        group = &meetEstimateGroup;
     } else {
-        return beatEstimateGroup;
+        group = &beatEstimateGroup;
     }
+
+    std::vector<std::string> tickers;
+    for (const auto& stock : *group) {
+        tickers.push_back(stock.ticker);
+    }
+    return tickers;
 }
 
+int main() {
+    std::string filename = "Russell3000EarningsAnnouncements.csv";
+    StockGroups stockGroups;
+
+    stockGroups.groupStocksBySurprisePercentage(filename);
+    
+    std::cout << "Miss Estimate Group:" << std::endl;
+    stockGroups.printGroup(2);
+    std::cout << std::endl;
+
+    return 0;
+}
 
 
 

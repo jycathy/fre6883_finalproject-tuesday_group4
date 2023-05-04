@@ -6,21 +6,23 @@
 #include <string>
 
 using namespace std;
-struct Stock {
-    string ticker;
-    double surprise_percentage;
-};
+namespace project{
+    struct Stock {
+        string ticker;
+        double surprise_percentage;
+    };
 
-class StockGroups {
-public:
-    void groupStocksBySurprisePercentage(const std::string& filename);
-    void printGroup(int groupNumber) const;
-    std::vector<std::string> getGroup(int groupNumber) const;
+    class StockGroups {
+    public:
+        void groupStocksBySurprisePercentage(const std::string& filename);
+        void printGroup(int groupNumber) const;
+        std::vector<std::string> getGroup(int groupNumber) const;
 
-private:
-    std::vector<Stock> missEstimateGroup;
-    std::vector<Stock> meetEstimateGroup;
-    std::vector<Stock> beatEstimateGroup;
-};
+    private:
+        std::vector<Stock> missEstimateGroup;
+        std::vector<Stock> meetEstimateGroup;
+        std::vector<Stock> beatEstimateGroup;
+    };
+}
 
 

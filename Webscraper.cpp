@@ -6,6 +6,7 @@
 #include <iomanip>
 #include <sstream>
 #include <locale>
+#include <map>
 #include "Grouping.h"
 #include "curl/curl.h"
 #include "Webscraper.h"
@@ -44,6 +45,70 @@ int write_data2(void* ptr, size_t size, size_t nmemb, void* data)
 	return realsize;
 }
 
+
+////////////////////////////////////////////////////////////////////////
+map<string,string> Webscraper::GetDate()
+{
+	map<string,string> month;
+	month["JAN"]="01";
+    month["FEB"]="02";
+    month["MAR"]="03";
+    month["APR"]="04";
+    month["MAY"]="05";
+    month["JUN"]="06";
+    month["JUL"]="07";
+    month["AUG"]="08";
+    month["SEP"]="09";
+    month["OCT"]="10";
+    month["NOV"]="11";
+    month["DEC"]="12";
+    
+    ifstream fin;
+    fin.open("Russell3000EarningsAnnouncements.csv");
+    string line, year, day, date, symbol, ini_date;
+    getline(fin,line); //skip the first line
+    map<string,string> Date;
+    while (getline(fin,line))
+    {
+    	symbol = line.substr(0,line.find_first_of(","));
+    	line.erase(0,line.find_first_of(",") + 1);
+    	ini_date = line.substr(0,line.find_first_of(","));
+    	day = ini_date.substr(0,2);
+    	year = ini_date.substr(7,2);
+    	string month_str = ini_date.substr(3, 3);
+        for (int i = 0; i < 3; i++) //make sure all the letters are capital
+        {
+            month_str[i] = toupper(month_str[i]);
+        }
+    	date = "20" + year + "-" + month[ini_date.substr(3,3)] + "-" + day;
+    	Date[symbol] = date;
+    }
+    
+    return Date;
+}
+
+
+void Webscraper::GetStartDate()
+{
+	
+}
+
+
+void Webscraper::GetEndDate()
+{
+	
+}
+
+
+
+
+
+
+
+
+
+
+////////////////////////////////////////////////////////////////////////
 void Webscraper::getStockData()
 {
 	groups.groupStocksBySurprisePercentage("Russell3000EarningsAnnouncements.csv");
@@ -75,20 +140,11 @@ void Webscraper::getStockData()
 		if (i == 2) {strcpy(resultfilename, "meetEstimateGroup.txt");}
 		if (i == 3) {strcpy(resultfilename, "missEstimateGroup.txt");}
 		for (const string& symbol : currentGroup) {
-            cout << "Current symbol: " << symbol << endl;
 			
 			struct MemoryStruct data;
 			data.memory = NULL;
 			data.size = 0;
 
-			
-			cout << "url_common: " << url_common << endl;
-			cout << "symbol: " << symbol << endl;
-			cout << "startdate: " << startdate << endl;
-			cout << "enddate: " << enddate << endl;
-			cout << "api_token: " << api_token << endl;
-
-			
 			string url_request = url_common + symbol + ".US?" + "from=" + startdate + "&to=" + enddate + "&api_token=" + api_token + "&period=d";
 			curl_easy_setopt(handle, CURLOPT_URL, url_request.c_str());
 
@@ -267,10 +323,12 @@ void Webscraper::getIWVData()
 }
 
 
+
+
 int main()
 {
-	project::Webscraper Scraper("2023-03-01", "2023-03-31");
+	project::Webscraper Scraper("2023-03-01", "2023-03-10");
 	Scraper.getStockData();
-	
+	Scraper.getIWVData();
 }
 

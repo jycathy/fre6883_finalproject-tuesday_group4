@@ -7,6 +7,7 @@
 #include<cmath>
 #include <fstream>
 #include <locale>
+#include <map>
 #include "curl/curl.h"
 
 
@@ -23,6 +24,9 @@ namespace project{
                 startdate = start_date;
                 enddate = end_date;
             }
+            map<string,string> GetDate();
+            void GetStartDate();
+            void GetEndDate();
             void getStockData();
             void getIWVData();
         

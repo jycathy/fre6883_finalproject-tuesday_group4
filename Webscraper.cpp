@@ -46,10 +46,8 @@ int write_data2(void* ptr, size_t size, size_t nmemb, void* data)
 
 void Webscraper::getStockData()
 {
+	groups.groupStocksBySurprisePercentage("Russell3000EarningsAnnouncements.csv");
 	
-	ofstream fout;
-    
-
 	// file pointer to create file that store the data  
 	FILE* fp;
 	char resultfilename[FILENAME_MAX];
@@ -69,20 +67,28 @@ void Webscraper::getStockData()
 	if (handle)
 	{
 		string url_common = "https://eodhistoricaldata.com/api/eod/";
-		
-		string api_token = "644dd3c5307e07.87085785";  // You must replace this API token with yours
+		string api_token = "644dd3c5307e07.87085785";  // You just replace this API token with yours
 		for (int i = 1; i <= 3; i++){
-		vector<string>::iterator itr = groups.getGroup(i).begin();
+		cout << "Size of group " << i << ": " << groups.getGroup(i).size() << endl;
+		vector<string> currentGroup = groups.getGroup(i);
 		if (i == 1) {strcpy(resultfilename, "beatEstimateGroup.txt");}
 		if (i == 2) {strcpy(resultfilename, "meetEstimateGroup.txt");}
 		if (i == 3) {strcpy(resultfilename, "missEstimateGroup.txt");}
-		for (;itr!=groups.getGroup(i).end();itr++)
-		{
+		for (const string& symbol : currentGroup) {
+            cout << "Current symbol: " << symbol << endl;
+			
 			struct MemoryStruct data;
 			data.memory = NULL;
 			data.size = 0;
 
-			string symbol = *itr;
+			
+			cout << "url_common: " << url_common << endl;
+			cout << "symbol: " << symbol << endl;
+			cout << "startdate: " << startdate << endl;
+			cout << "enddate: " << enddate << endl;
+			cout << "api_token: " << api_token << endl;
+
+			
 			string url_request = url_common + symbol + ".US?" + "from=" + startdate + "&to=" + enddate + "&api_token=" + api_token + "&period=d";
 			curl_easy_setopt(handle, CURLOPT_URL, url_request.c_str());
 
@@ -141,6 +147,7 @@ void Webscraper::getStockData()
 			data.size = 0;
 		}
 		}
+		
 
 	}
 	else
@@ -162,9 +169,6 @@ void Webscraper::getStockData()
 
 void Webscraper::getIWVData()
 {
-	
-	ofstream fout;
-    
 
 	// file pointer to create file that store the data  
 	FILE* fp;
@@ -207,16 +211,9 @@ void Webscraper::getIWVData()
 		result = curl_easy_perform(handle);
 		fprintf(fp, "%c", '\n');
 		fclose(fp);
-
-			// check for errors 
-			if (result != CURLE_OK) {
-				fprintf(stderr, "curl_easy_perform() failed: %s\n", curl_easy_strerror(result));
-				return;
-			}
-
-			curl_easy_setopt(handle, CURLOPT_WRITEFUNCTION, write_data2);
-			curl_easy_setopt(handle, CURLOPT_WRITEDATA, (void*)&data);
-
+		
+		curl_easy_setopt(handle, CURLOPT_WRITEFUNCTION, write_data2);
+		curl_easy_setopt(handle, CURLOPT_WRITEDATA, (void*)&data);
 			// perform, then store the expected code in result
 			result = curl_easy_perform(handle);
 
@@ -274,6 +271,6 @@ int main()
 {
 	project::Webscraper Scraper("2023-03-01", "2023-03-31");
 	Scraper.getStockData();
-	Scraper.getIWVData();
+	
 }
 

@@ -46,7 +46,7 @@ namespace project{
     }
 
 
-    void StockGroups::printGroup(int groupNumber) const {
+    vector<Stock> StockGroups::printGroup(int groupNumber) const {
         const vector<Stock>* group;
 
         if (groupNumber == 1) {
@@ -62,7 +62,7 @@ namespace project{
         }
     }
 
-    vector<std::string> StockGroups::getGroup(int groupNumber) const {
+    vector<string> StockGroups::getGroup(int groupNumber) const {
         const std::vector<Stock>* group;
 
         if (groupNumber == 1) {

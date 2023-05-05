@@ -15,7 +15,7 @@ namespace project{
     class StockGroups {
     public:
         void groupStocksBySurprisePercentage(const std::string& filename);
-        void printGroup(int groupNumber) const;
+        std::vector<Stock> printGroup(int groupNumber) const;
         std::vector<std::string> getGroup(int groupNumber) const;
 
     private:

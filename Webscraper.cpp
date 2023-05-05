@@ -14,24 +14,6 @@ using namespace std;
 namespace project{
 StockGroups groups;
 
-const char* cIWB3000SymbolFile = "Russell_3000_component_stocks.csv";
-
-void populateSymbolVector(vector<string>& symbols)
-{
-	ifstream fin;
-	fin.open(cIWB3000SymbolFile, ios::in);
-	string line, name, symbol;
-	while (!fin.eof())
-	{
-		//fin >> line;
-		getline(fin, line);
-		stringstream sin(line);
-		getline(sin, symbol, ',');
-		getline(sin, name);
-		symbols.push_back(symbol);
-	}
-}
-
 int write_data(void* ptr, int size, int nmemb, FILE* stream)
 {
 	size_t written;
@@ -64,16 +46,13 @@ int write_data2(void* ptr, size_t size, size_t nmemb, void* data)
 
 void Webscraper::getStockData()
 {
-	vector<string> symbolList;
-	populateSymbolVector(symbolList);
 	
 	ofstream fout;
     
 
 	// file pointer to create file that store the data  
 	FILE* fp;
-
-	const char resultfilename[FILENAME_MAX] = "Results.txt";
+	char resultfilename[FILENAME_MAX];
 
 	// declaration of an object CURL 
 	CURL* handle;
@@ -90,19 +69,21 @@ void Webscraper::getStockData()
 	if (handle)
 	{
 		string url_common = "https://eodhistoricaldata.com/api/eod/";
-		string start_date = "2023-03-01";
-		string end_date = "2023-03-31";
+		
 		string api_token = "644dd3c5307e07.87085785";  // You must replace this API token with yours
 		for (int i = 1; i <= 3; i++){
 		vector<string>::iterator itr = groups.getGroup(i).begin();
-		for (;itr!=symbolList.end();itr++)
+		if (i == 1) {strcpy(resultfilename, "beatEstimateGroup.txt");}
+		if (i == 2) {strcpy(resultfilename, "meetEstimateGroup.txt");}
+		if (i == 3) {strcpy(resultfilename, "missEstimateGroup.txt");}
+		for (;itr!=groups.getGroup(i).end();itr++)
 		{
 			struct MemoryStruct data;
 			data.memory = NULL;
 			data.size = 0;
 
 			string symbol = *itr;
-			string url_request = url_common + symbol + ".US?" + "from=" + start_date + "&to=" + end_date + "&api_token=" + api_token + "&period=d";
+			string url_request = url_common + symbol + ".US?" + "from=" + startdate + "&to=" + enddate + "&api_token=" + api_token + "&period=d";
 			curl_easy_setopt(handle, CURLOPT_URL, url_request.c_str());
 
 			//adding a user agent
@@ -179,11 +160,8 @@ void Webscraper::getStockData()
 
 
 
-
 void Webscraper::getIWVData()
 {
-	vector<string> symbolList;
-	populateSymbolVector(symbolList);
 	
 	ofstream fout;
     
@@ -191,7 +169,7 @@ void Webscraper::getIWVData()
 	// file pointer to create file that store the data  
 	FILE* fp;
 
-	const char resultfilename[FILENAME_MAX] = "Results.txt";
+	const char resultfilename[FILENAME_MAX] = "IWV.txt";
 
 	// declaration of an object CURL 
 	CURL* handle;
@@ -208,8 +186,6 @@ void Webscraper::getIWVData()
 	if (handle)
 	{
 		string url_common = "https://eodhistoricaldata.com/api/eod/";
-		string start_date = "2023-03-01";
-		string end_date = "2023-03-31";
 		string api_token = "644dd3c5307e07.87085785"; 
 		
 		struct MemoryStruct data;
@@ -217,7 +193,7 @@ void Webscraper::getIWVData()
 		data.size = 0;
 
 		string symbol = "IWV";
-		string url_request = url_common + symbol + ".US?" + "from=" + start_date + "&to=" + end_date + "&api_token=" + api_token + "&period=d";
+		string url_request = url_common + symbol + ".US?" + "from=" + startdate + "&to=" + enddate + "&api_token=" + api_token + "&period=d";
 		curl_easy_setopt(handle, CURLOPT_URL, url_request.c_str());
 
 		//adding a user agent
@@ -292,3 +268,12 @@ void Webscraper::getIWVData()
 }
 
 }
+
+
+int main()
+{
+	project::Webscraper Scraper("2023-03-01", "2023-03-31");
+	Scraper.getStockData();
+	Scraper.getIWVData();
+}
+

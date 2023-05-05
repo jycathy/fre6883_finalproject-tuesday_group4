@@ -40,9 +40,9 @@ namespace project{
         size_t size = stocks.size();
         size_t group_size = size / 3;
 
-        missEstimateGroup.assign(stocks.begin(), stocks.begin() + group_size);
+        beatEstimateGroup.assign(stocks.begin(), stocks.begin() + group_size);
         meetEstimateGroup.assign(stocks.begin() + group_size, stocks.begin() + group_size * 2);
-        beatEstimateGroup.assign(stocks.begin() + group_size * 2, stocks.end());
+        missEstimateGroup.assign(stocks.begin() + group_size * 2, stocks.end());
     }
 
 
@@ -50,11 +50,11 @@ namespace project{
         const vector<Stock>* group;
 
         if (groupNumber == 1) {
-            group = &missEstimateGroup;
+            group = &beatEstimateGroup;
         } else if (groupNumber == 2) {
             group = &meetEstimateGroup;
         } else {
-            group = &beatEstimateGroup;
+            group = &missEstimateGroup;
         }
 
         for (const auto& stock : *group) {
@@ -66,11 +66,11 @@ namespace project{
         const std::vector<Stock>* group;
 
         if (groupNumber == 1) {
-            group = &missEstimateGroup;
+            group = &beatEstimateGroup;
         } else if (groupNumber == 2) {
             group = &meetEstimateGroup;
         } else {
-            group = &beatEstimateGroup;
+            group = &missEstimateGroup;
         }
 
         vector<std::string> tickers;

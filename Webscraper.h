@@ -18,10 +18,10 @@ namespace project{
         string enddate;
         
         public:
-            Webscraper(string startdate_, string enddate_)
+            Webscraper(string start_date, string end_date)
             {
-                startdate = startdate_;
-                enddate = enddate_;
+                startdate = start_date;
+                enddate = end_date;
             }
             void getStockData();
             void getIWVData();

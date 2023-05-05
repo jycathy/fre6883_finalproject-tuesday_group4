@@ -15,18 +15,17 @@ using namespace std;
 namespace project{
     class Webscraper{
         private:
-        string startdate;
-        string enddate;
+        int N
         
         public:
-            Webscraper(string start_date, string end_date)
+            Webscraper(N_)
             {
-                startdate = start_date;
-                enddate = end_date;
+                N = N_
             }
-            map<string,string> GetDate();
-            void GetStartDate();
-            void GetEndDate();
+            map<string,string> GetDate(map<string,string> &Date);
+            std::vector<string> GetTradingDays();
+            void GetStartDate(map<string,string> &Date,string &symbol, vector<string> &trading_dates， int N);
+            void GetEndDate(map<string,string> &Date,string &symbol, vector<string> &trading_dates， int N);
             void getStockData();
             void getIWVData();
         

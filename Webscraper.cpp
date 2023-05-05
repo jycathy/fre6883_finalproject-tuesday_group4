@@ -47,7 +47,7 @@ int write_data2(void* ptr, size_t size, size_t nmemb, void* data)
 
 
 ////////////////////////////////////////////////////////////////////////
-map<string,string> Webscraper::GetDate()
+map<string,string> Webscraper::GetDate(map<string,string> &Date)
 {
 	map<string,string> month;
 	month["JAN"]="01";
@@ -67,7 +67,7 @@ map<string,string> Webscraper::GetDate()
     fin.open("Russell3000EarningsAnnouncements.csv");
     string line, year, day, date, symbol, ini_date;
     getline(fin,line); //skip the first line
-    map<string,string> Date;
+    
     while (getline(fin,line))
     {
     	symbol = line.substr(0,line.find_first_of(","));
@@ -88,20 +88,56 @@ map<string,string> Webscraper::GetDate()
 }
 
 
-void Webscraper::GetStartDate()
+std::vector<string> Webscraper::GetTradingDays()
 {
-	
+	ifstream fin;
+    fin.open("Russell3000EarningsAnnouncements.csv");
+    vector<string> trading_dates;
+    string line;
+
+    while (getline(fin, line))
+    {
+        trading_dates.push_back(line);
+    }
+
+    return trading_dates;
 }
 
 
-void Webscraper::GetEndDate()
+
+
+string Webscraper::GetStartDate(map<string,string> &Date,string &symbol, vector<string> &trading_dates， int N)
 {
-	
+	auto it = find(trading_dates.begin(), trading_dates.end(), Date[symbol]);
+	if (it == trading_dates.end()) 
+    {
+        return "";
+    }
+    int index = distance(trading_dates.begin(), it);
+    int new_index = index - N;
+    if (new_index < 0 || new_index >= trading_dates.size()) 
+    {
+        return "";
+    }
+    return trading_dates[new_index];
 }
 
 
-
-
+void Webscraper::GetEndDate(map<string,string> &Date,string symbol, vector<string> &trading_dates， int N)
+{
+	auto it = find(trading_dates.begin(), trading_dates.end(), Date[symbol]);
+	if (it == trading_dates.end()) 
+    {
+        return "";
+    }
+    int index = distance(trading_dates.begin(), it);
+    int new_index = index + N;
+    if (new_index < 0 || new_index >= trading_dates.size()) 
+    {
+        return "";
+    }
+    return trading_dates[new_index];
+}
 
 
 
@@ -112,6 +148,8 @@ void Webscraper::GetEndDate()
 void Webscraper::getStockData()
 {
 	groups.groupStocksBySurprisePercentage("Russell3000EarningsAnnouncements.csv");
+	
+	
 	
 	// file pointer to create file that store the data  
 	FILE* fp;

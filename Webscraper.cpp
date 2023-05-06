@@ -47,8 +47,8 @@ int write_data2(void* ptr, size_t size, size_t nmemb, void* data)
 }
 
 
-////////////////////////////////////////////////////////////////////////
-map<string,string> Webscraper::GetDate(map<string,string> &Date)
+//////////////////////////////////////////////////////////////////////// 设置时间N
+map<string,string> Webscraper::GetDate(map<string,string> &Date) //将时间转化成正规形式
 {
 	map<string,string> month;
 	month["JAN"]="01";
@@ -89,7 +89,7 @@ map<string,string> Webscraper::GetDate(map<string,string> &Date)
 }
 
 
-std::vector<string> Webscraper::GetTradingDays()
+std::vector<string> Webscraper::GetTradingDays() //交易日历
 {
 	ifstream fin;
     fin.open("Trading_dates.csv");
@@ -104,7 +104,7 @@ std::vector<string> Webscraper::GetTradingDays()
     return trading_dates;
 }
 
-
+//ea 前N天时间起始日
 string Webscraper::GetStartDate(map<string,string> &Date, string &symbol, vector<string> &trading_dates, int N)
 {
     auto it = find(trading_dates.begin(), trading_dates.end(), Date[symbol]);
@@ -121,6 +121,7 @@ string Webscraper::GetStartDate(map<string,string> &Date, string &symbol, vector
     return trading_dates[new_index];
 }
 
+//ea 后N天时间结束日
 string Webscraper::GetEndDate(map<string,string> &Date, string &symbol, vector<string> &trading_dates, int N)
 {
     auto it = find(trading_dates.begin(), trading_dates.end(), Date[symbol]);
@@ -139,7 +140,7 @@ string Webscraper::GetEndDate(map<string,string> &Date, string &symbol, vector<s
 
 
 ////////////////////////////////////////////////////////////////////////
-void Webscraper::getStockData()
+void Webscraper::getStockData() // 抓取数据
 {
 	groups.groupStocksBySurprisePercentage("Russell3000EarningsAnnouncements.csv");
 
@@ -175,10 +176,13 @@ void Webscraper::getStockData()
 		if (i == 1) {strcpy(resultfilename, "beatEstimateGroup.txt");}
 		if (i == 2) {strcpy(resultfilename, "meetEstimateGroup.txt");}
 		if (i == 3) {strcpy(resultfilename, "missEstimateGroup.txt");}
+		
+		std::vector<std::vector<string>> matrix;
+		std::vector<string> row;
 		for (const string& symbol : currentGroup) {
 			string non_const_symbol = symbol;
-    		string startdate = GetStartDate(Date, non_const_symbol, trading_dates, N);
-    		string enddate = GetEndDate(Date, non_const_symbol, trading_dates, N);
+    		string startdate = GetStartDate(Date, non_const_symbol, trading_dates, N); //每支股票起始日
+    		string enddate = GetEndDate(Date, non_const_symbol, trading_dates, N);   //每支股票结束日
 
 			struct MemoryStruct data;
 			data.memory = NULL;
@@ -192,19 +196,7 @@ void Webscraper::getStockData()
 			curl_easy_setopt(handle, CURLOPT_USERAGENT, "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:74.0) Gecko/20100101 Firefox/74.0");
 			curl_easy_setopt(handle, CURLOPT_SSL_VERIFYPEER, 0);
 			curl_easy_setopt(handle, CURLOPT_SSL_VERIFYHOST, 0);
-			fp = fopen(resultfilename, "ab");
-			fprintf(fp, "%s\n", symbol.c_str());
-			curl_easy_setopt(handle, CURLOPT_WRITEFUNCTION, write_data);
-			curl_easy_setopt(handle, CURLOPT_WRITEDATA, fp);
-			result = curl_easy_perform(handle);
-			fprintf(fp, "%c", '\n');
-			fclose(fp);
-
-			// check for errors 
-			if (result != CURLE_OK) {
-				fprintf(stderr, "curl_easy_perform() failed: %s\n", curl_easy_strerror(result));
-				return;
-			}
+			
 
 			curl_easy_setopt(handle, CURLOPT_WRITEFUNCTION, write_data2);
 			curl_easy_setopt(handle, CURLOPT_WRITEDATA, (void*)&data);
@@ -222,23 +214,37 @@ void Webscraper::getStockData()
 			sData.str(data.memory);
 			string sValue, sDate;
 			double dValue = 0;
-			double sum = 0;
+			
 			string line;
-			cout << symbol << endl;
+			row.push_back(symbol);
+			
 			while (getline(sData, line)) {
 				size_t found = line.find('-');
     			if (found != std::string::npos)
     			{
-    			cout << line << endl;
+    			
     			sDate = line.substr(0, line.find_first_of(','));
     			line.erase(line.find_last_of(','));
-    			sValue = line.substr(line.find_first_of(',') + 1);
-    			dValue = strtod(sValue.c_str(), NULL);
-    			cout << sDate << " " << std::fixed << ::setprecision(6) << dValue << endl;
+    			sValue = line.substr(line.find_last_of(',') + 1);
+    			row.push_back(sValue);
     			}
-			}
-
+    		}
+    		matrix.push_back(row); 
+    		row.clear();
+/*
+将adjusted close存入matrix， matrix中都为string,计算的时候得先转换为double
+如果需要日期信息，可以通过前面的起始结束日期来调用
+*/
 		}
+		fp = fopen(resultfilename, "ab");
+			//打印矩阵
+    		for (const auto &row : matrix) {
+        		for (const auto &element : row) {
+            		fprintf(fp, "%s ", element.c_str());
+        	}
+        	 fprintf(fp, "\n");
+			}
+			fclose(fp);
 		}
 	}
 	else
@@ -253,7 +259,11 @@ void Webscraper::getStockData()
 	curl_global_cleanup();
 
 }
-void Webscraper::getIWVData() // 这里还没有管
+
+
+
+
+void Webscraper::getIWVData() // 这里还没有管,因为不知道日期那里怎么搞
 {
 
 	// file pointer to create file that store the data  
@@ -326,7 +336,7 @@ void Webscraper::getIWVData() // 这里还没有管
 					cout << line << endl;
 					sDate = line.substr(0, line.find_first_of(','));
 					line.erase(line.find_last_of(','));
-					sValue = line.substr(line.find_first_of(',') + 1);
+					sValue = line.substr(line.find_last_of(',') + 1);
 					dValue = strtod(sValue.c_str(), NULL);
 					cout << sDate << " " << std::fixed << ::setprecision(6) << dValue << endl;
 				}	
@@ -356,7 +366,12 @@ void Webscraper::getIWVData() // 这里还没有管
 
 int main()
 {
-    project::Webscraper Scraper(10);
+    project::Webscraper Scraper(5);
     Scraper.getStockData();
 }
 
+/*
+现在分完了组，把日期的N搞定了，然后分组抓下来放进matrix里
+但是我们select和cleaning还有IWV还不知道该怎么弄，因为先弄下来的数据看着好像没有nan值，然后IWV是日期不知道怎么设置
+不过应该不影响后面矩阵的计算
+*/

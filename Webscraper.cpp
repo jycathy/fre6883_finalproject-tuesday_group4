@@ -5,6 +5,7 @@
 #include <vector>
 #include <iomanip>
 #include <sstream>
+#include <algorithm>
 #include <locale>
 #include <map>
 #include "Grouping.h"
@@ -74,16 +75,16 @@ map<string,string> Webscraper::GetDate(map<string,string> &Date)
     	line.erase(0,line.find_first_of(",") + 1);
     	ini_date = line.substr(0,line.find_first_of(","));
     	day = ini_date.substr(0,2);
-    	year = ini_date.substr(7,2);
+    	year = ini_date.substr(7);
     	string month_str = ini_date.substr(3, 3);
         for (int i = 0; i < 3; i++) //make sure all the letters are capital
         {
             month_str[i] = toupper(month_str[i]);
         }
-    	date = "20" + year + "-" + month[ini_date.substr(3,3)] + "-" + day;
+    	date = year + "-" + month[month_str] + "-" + day;
     	Date[symbol] = date;
     }
-    
+    fin.close();
     return Date;
 }
 
@@ -91,7 +92,7 @@ map<string,string> Webscraper::GetDate(map<string,string> &Date)
 std::vector<string> Webscraper::GetTradingDays()
 {
 	ifstream fin;
-    fin.open("Russell3000EarningsAnnouncements.csv");
+    fin.open("Trading_dates.csv");
     vector<string> trading_dates;
     string line;
 
@@ -99,17 +100,15 @@ std::vector<string> Webscraper::GetTradingDays()
     {
         trading_dates.push_back(line);
     }
-
+    fin.close();
     return trading_dates;
 }
 
 
-
-
-string Webscraper::GetStartDate(map<string,string> &Date,string &symbol, vector<string> &trading_dates， int N)
+string Webscraper::GetStartDate(map<string,string> &Date, string &symbol, vector<string> &trading_dates, int N)
 {
-	auto it = find(trading_dates.begin(), trading_dates.end(), Date[symbol]);
-	if (it == trading_dates.end()) 
+    auto it = find(trading_dates.begin(), trading_dates.end(), Date[symbol]);
+    if (it == trading_dates.end()) 
     {
         return "";
     }
@@ -122,11 +121,10 @@ string Webscraper::GetStartDate(map<string,string> &Date,string &symbol, vector<
     return trading_dates[new_index];
 }
 
-
-void Webscraper::GetEndDate(map<string,string> &Date,string symbol, vector<string> &trading_dates， int N)
+string Webscraper::GetEndDate(map<string,string> &Date, string &symbol, vector<string> &trading_dates, int N)
 {
-	auto it = find(trading_dates.begin(), trading_dates.end(), Date[symbol]);
-	if (it == trading_dates.end()) 
+    auto it = find(trading_dates.begin(), trading_dates.end(), Date[symbol]);
+    if (it == trading_dates.end()) 
     {
         return "";
     }
@@ -140,16 +138,16 @@ void Webscraper::GetEndDate(map<string,string> &Date,string symbol, vector<strin
 }
 
 
-
-
-
-
 ////////////////////////////////////////////////////////////////////////
 void Webscraper::getStockData()
 {
 	groups.groupStocksBySurprisePercentage("Russell3000EarningsAnnouncements.csv");
-	
-	
+
+    map<string, string> Date;
+    vector<string> trading_dates;
+    
+    Date = GetDate(Date);
+    trading_dates = GetTradingDays();
 	
 	// file pointer to create file that store the data  
 	FILE* fp;
@@ -178,12 +176,16 @@ void Webscraper::getStockData()
 		if (i == 2) {strcpy(resultfilename, "meetEstimateGroup.txt");}
 		if (i == 3) {strcpy(resultfilename, "missEstimateGroup.txt");}
 		for (const string& symbol : currentGroup) {
-			
+			string non_const_symbol = symbol;
+    		string startdate = GetStartDate(Date, non_const_symbol, trading_dates, N);
+    		string enddate = GetEndDate(Date, non_const_symbol, trading_dates, N);
+
 			struct MemoryStruct data;
 			data.memory = NULL;
 			data.size = 0;
+			
 
-			string url_request = url_common + symbol + ".US?" + "from=" + startdate + "&to=" + enddate + "&api_token=" + api_token + "&period=d";
+			string url_request = url_common + non_const_symbol + ".US?" + "from=" + startdate + "&to=" + enddate + "&api_token=" + api_token + "&period=d";
 			curl_easy_setopt(handle, CURLOPT_URL, url_request.c_str());
 
 			//adding a user agent
@@ -216,7 +218,6 @@ void Webscraper::getStockData()
 				fprintf(stderr, "curl_easy_perform() failed: %s\n", curl_easy_strerror(result));
 				return;
 			}
-			
 			stringstream sData;
 			sData.str(data.memory);
 			string sValue, sDate;
@@ -226,42 +227,33 @@ void Webscraper::getStockData()
 			cout << symbol << endl;
 			while (getline(sData, line)) {
 				size_t found = line.find('-');
-				if (found != std::string::npos)
-				{
-					cout << line << endl;
-					sDate = line.substr(0, line.find_first_of(','));
-					line.erase(line.find_last_of(','));
-					sValue = line.substr(line.find_first_of(',') + 1);
-					dValue = strtod(sValue.c_str(), NULL);
-					cout << sDate << " " << std::fixed << ::setprecision(6) << dValue << endl;
-				}	
+    			if (found != std::string::npos)
+    			{
+    			cout << line << endl;
+    			sDate = line.substr(0, line.find_first_of(','));
+    			line.erase(line.find_last_of(','));
+    			sValue = line.substr(line.find_first_of(',') + 1);
+    			dValue = strtod(sValue.c_str(), NULL);
+    			cout << sDate << " " << std::fixed << ::setprecision(6) << dValue << endl;
+    			}
 			}
-			
-			free(data.memory);
-			data.size = 0;
-		}
-		}
-		
 
+		}
+		}
 	}
 	else
 	{
 		fprintf(stderr, "Curl init failed!\n");
 		return ;
 	}
-
 	// cleanup since you've used curl_easy_init  
 	curl_easy_cleanup(handle);
 
 	// release resources acquired by curl_global_init() 
 	curl_global_cleanup();
 
-    
 }
-
-
-
-void Webscraper::getIWVData()
+void Webscraper::getIWVData() // 这里还没有管
 {
 
 	// file pointer to create file that store the data  
@@ -289,6 +281,8 @@ void Webscraper::getIWVData()
 		struct MemoryStruct data;
 		data.memory = NULL;
 		data.size = 0;
+		string startdate = "2023-03-01";
+		string enddate = "2023-03-10";
 
 		string symbol = "IWV";
 		string url_request = url_common + symbol + ".US?" + "from=" + startdate + "&to=" + enddate + "&api_token=" + api_token + "&period=d";
@@ -360,13 +354,9 @@ void Webscraper::getIWVData()
 
 }
 
-
-
-
 int main()
 {
-	project::Webscraper Scraper("2023-03-01", "2023-03-10");
-	Scraper.getStockData();
-	Scraper.getIWVData();
+    project::Webscraper Scraper(10);
+    Scraper.getStockData();
 }
 

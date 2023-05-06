@@ -10,25 +10,25 @@
 #include <map>
 #include "curl/curl.h"
 
-
 using namespace std;
 namespace project{
     class Webscraper{
         private:
-        int N
+        int N;
         
         public:
-            Webscraper(N_)
+            Webscraper(int N_)
             {
-                N = N_
+                N = N_;
             }
             map<string,string> GetDate(map<string,string> &Date);
             std::vector<string> GetTradingDays();
-            void GetStartDate(map<string,string> &Date,string &symbol, vector<string> &trading_dates， int N);
-            void GetEndDate(map<string,string> &Date,string &symbol, vector<string> &trading_dates， int N);
+            string GetStartDate(map<string,string> &Date,string &symbol, vector<string> &trading_dates, int N);
+            string GetEndDate(map<string,string> &Date,string &symbol, vector<string> &trading_dates, int N);
             void getStockData();
             void getIWVData();
         
     };
 }
+
 

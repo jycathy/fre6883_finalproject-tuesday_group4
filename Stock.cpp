@@ -41,6 +41,21 @@ namespace project{
         }
     }
     
+    void Stock_info::calAbnormalReturn()
+    {
+        Abnormal_Return.clear();
+        this->calDailyReturn();
+        int n = Daily_Return.size();
+        Abnormal_Return.resize(n);
+        for (int i=0; i<n; i++)
+        {
+            Abnormal_Return[i] = Daily_Return[i] - 0.03;//change 0.03 to IWV corresponding return
+        }
+    }
+    
+    
+    
+    
     void ETF::set_all_dates(vector<string> dates_list)
     {
         int m = dates_list.size();

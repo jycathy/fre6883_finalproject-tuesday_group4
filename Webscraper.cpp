@@ -9,7 +9,6 @@
 #include <locale>
 #include <map>
 #include "Grouping.h"
-#include "curl/curl.h"
 #include "Webscraper.h"
 
 using namespace std;
@@ -459,6 +458,7 @@ int main()
     Scraper.createStockMap("Russell3000EarningsAnnouncements.csv");
     //Scraper.getStockData();
     Scraper.getIWVData("2023-03-01","2023-03-10");
+	
 }
 
 /*

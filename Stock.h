@@ -16,6 +16,8 @@ namespace project {
             vector<double> Price;
             vector<double> Daily_Return;
             vector<double> Cumulative_Return;
+            vector<double> Abnormal_Return;
+            
             string start_date;
             string end_date;
             string group;
@@ -42,6 +44,7 @@ namespace project {
             
             void calDailyReturn();
             void calCumulativeReturn();
+            void calAbnormalReturn();
             
             void printInfo()    // for test
             {

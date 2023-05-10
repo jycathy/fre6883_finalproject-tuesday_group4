@@ -81,6 +81,7 @@ namespace project {
             void set_Price(vector<double> prices_);       // set prices for all dates
             
             vector<string> get_all_dates() {return all_dates;}
+            vector<double> get_all_prices() {return Price;}
             vector<double> get_corresponding_price(string startDate, string endDate);  // the corresponding portion of price
             vector<double> get_corresponding_return(string startDate, string endDate);  // the size should be ONE less than corresponding price
             

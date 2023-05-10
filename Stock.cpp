@@ -67,4 +67,37 @@ namespace project{
         Price.clear();
     }
     
+    vector<double> ETF::get_corresponding_price(string startDate, string endDate)    // startDate and endDate must be trading date
+    {
+        vector<double> temp;
+        int m = all_dates.size();
+        int beginidx=0, endidx=0;
+        
+        for(int i= 0; i<m; i++)
+        {
+            if(all_dates[i]==startDate) { beginidx = i; }
+            else if(all_dates[i]==endDate) { endidx = i; }
+        }
+        
+        for(int k=beginidx;k<=endidx; k++)
+        {
+            temp.push_back(Price[k]);
+        }
+        
+        return temp;
+    }
+    
+    vector<double> ETF::get_corresponding_return(string startDate, string endDate)
+    {
+        vector<double> price = this->get_corresponding_price(startDate, endDate);
+        vector<double> returns;
+        int m = price.size();
+        for(int i=1; i < m; i++)
+        {
+            returns.push_back(price[i]/price[i-1] - 1);
+        }
+        
+        return returns;
+    }
+    
 }

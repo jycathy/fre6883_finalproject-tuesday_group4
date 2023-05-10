@@ -41,4 +41,24 @@ namespace project{
         }
     }
     
+    void ETF::set_all_dates(vector<string> dates_list)
+    {
+        int m = dates_list.size();
+        all_dates.clear();
+        for(int i=0; i<m; i++)
+        {
+            all_dates.push_back(dates_list[i]);
+        }
+    }
+    
+    void ETF::set_Price(vector<double> prices_)
+    {
+        int m = prices_.size();
+        Price.clear();
+        for(int i=0; i<m; i++)
+        {
+            Price.push_back(prices_[i]);
+        }
+    }
+    
 }

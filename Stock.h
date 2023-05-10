@@ -69,4 +69,23 @@ namespace project {
             
             
     };
+    
+    class ETF
+    {
+        private:
+            string ticker;
+            vector<string> all_dates;
+            vector<double> Price;   // price for all dates, should be of the same size as all_dates
+        public:
+            ETF(string ticker_):ticker(ticker_){}
+            void set_all_dates(vector<string> dates_list);
+            void set_Price(vector<double> prices_);       // set prices for all dates
+            
+            vector<string> get_all_dates() {return all_dates;}
+            vector<double> get_corresponding_price(string startDate, string endDate);  // the corresponding portion of price
+            vector<double> get_corresponding_return(string startDate, string endDate);  // the size should be ONE less than corresponding price
+            
+            
+    };
+    
 }

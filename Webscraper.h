@@ -5,16 +5,23 @@
 #include <iomanip>
 #include <sstream>
 #include<cmath>
+#include <iterator>
 #include <fstream>
 #include <locale>
 #include <map>
 #include "curl/curl.h"
 
+#include "Stock.h"
+
 using namespace std;
 namespace project{
     class Webscraper{
         private:
-        int N;
+            int N;
+            map<string, Stock_info*> StockMap;
+            map<string, Stock_info*> BeatStockMap;
+            map<string, Stock_info*> MissStockMap;
+            map<string, Stock_info*> MeetStockMap;
         
         public:
             Webscraper(int N_)
@@ -27,6 +34,7 @@ namespace project{
             string GetEndDate(map<string,string> &Date,string &symbol, vector<string> &trading_dates, int N);
             void getStockData();
             void getIWVData();
+            void createStockMap(string filename);
         
     };
 }

@@ -173,16 +173,38 @@ void Webscraper::getStockData() // 抓取数据
 		for (int i = 1; i <= 3; i++){
 		cout << "Size of group " << i << ": " << groups.getGroup(i).size() << endl;
 		vector<string> currentGroup = groups.getGroup(i);
-		if (i == 1) {strcpy(resultfilename, "beatEstimateGroup.txt");}
-		if (i == 2) {strcpy(resultfilename, "meetEstimateGroup.txt");}
-		if (i == 3) {strcpy(resultfilename, "missEstimateGroup.txt");}
+		string group_name;
+		map<string, Stock_info*> *pMap;
+		if (i == 1)
+		{	
+			strcpy(resultfilename, "beatEstimateGroup.txt");
+			group_name = "Beat";
+			pMap = &BeatStockMap;
+		}
+		if (i == 2)
+		{
+			strcpy(resultfilename, "meetEstimateGroup.txt");
+			group_name = "Meet";
+			pMap = &MeetStockMap;
+		}
+		if (i == 3)
+		{
+			strcpy(resultfilename, "missEstimateGroup.txt");
+			group_name = "Miss";
+			pMap = &MissStockMap;
+		}
 		
+		cout<<"check"<<endl;
 		std::vector<std::vector<string>> matrix;
 		std::vector<string> row;
 		for (const string& symbol : currentGroup) {
 			string non_const_symbol = symbol;
     		string startdate = GetStartDate(Date, non_const_symbol, trading_dates, N); //每支股票起始日
     		string enddate = GetEndDate(Date, non_const_symbol, trading_dates, N);   //每支股票结束日
+    		
+    		StockMap[symbol]->setStartDate(startdate);
+    		StockMap[symbol]->setEndDate(enddate);
+    		StockMap[symbol]->setGroup(group_name);
 
 			struct MemoryStruct data;
 			data.memory = NULL;
@@ -213,7 +235,8 @@ void Webscraper::getStockData() // 抓取数据
 			stringstream sData;
 			sData.str(data.memory);
 			string sValue, sDate;
-			double dValue = 0;
+			double dValue = 0.0;
+			vector<double> price;
 			
 			string line;
 			row.push_back(symbol);
@@ -227,10 +250,15 @@ void Webscraper::getStockData() // 抓取数据
     			line.erase(line.find_last_of(','));
     			sValue = line.substr(line.find_last_of(',') + 1);
     			row.push_back(sValue);
+    			dValue = std::stod(sValue);
+    			price.push_back(dValue);
     			}
     		}
     		matrix.push_back(row); 
     		row.clear();
+    		StockMap[symbol]->setPrice(price);
+    		//StockMap[symbol]->printInfo();
+    		(*pMap)[symbol] = StockMap[symbol];
 /*
 将adjusted close存入matrix， matrix中都为string,计算的时候得先转换为double
 如果需要日期信息，可以通过前面的起始结束日期来调用
@@ -362,11 +390,46 @@ void Webscraper::getIWVData() // 这里还没有管,因为不知道日期那里�
     
 }
 
+void Webscraper::createStockMap(string filename)
+    // create whole stockMap from Announcement csv file
+	{
+		ifstream ifile;
+		ifile.open(filename, ios::in);
+		if (!ifile.is_open())
+			cout << "Error file not opened" << endl;
+		//else
+			//cout << "open" << endl;
+		string line, word;
+		vector<string> row;
+		ifile.ignore(10000, '\n');
+		while (!ifile.eof())
+		{
+			row.clear();
+
+			getline(ifile, line);
+			if (!line.empty()) {
+
+				stringstream s(line);
+
+				while (getline(s, word, ','))
+				{
+					row.push_back(word);
+				}
+				
+				Stock_info* st = new Stock_info(row[0], row[1], row[2], row[3], row[4], row[5], row[6]);
+				StockMap.insert(pair<string, Stock_info*>(row[0], st));
+			}
+
+		}
+		ifile.close();
+	}
+
 }
 
 int main()
 {
-    project::Webscraper Scraper(60);
+    project::Webscraper Scraper(10);
+    Scraper.createStockMap("Russell3000EarningsAnnouncements.csv");
     Scraper.getStockData();
 }
 

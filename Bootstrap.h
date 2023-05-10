@@ -31,7 +31,5 @@ namespace project{
     			    cout << itr->second->getAnnoucementDate() << endl;
     			}
             }
-                
-            
     };
 }

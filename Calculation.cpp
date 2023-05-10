@@ -1,10 +1,9 @@
 #include <iostream>
 #include <string>
 #include <vector>
-#include "calculation.h"
+#include "Calculation.h"
 using namespace std;
-namespace fre {
-    vector<double> get_daily_price();
+namespace project {
     
     vector<double> cal_daily_return(vector<double> daily_price)
     {

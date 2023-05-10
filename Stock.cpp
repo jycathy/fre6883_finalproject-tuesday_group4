@@ -8,6 +8,9 @@ using namespace std;
 
 namespace project{
 
-    
+    void Stock_info::setCumulativeReturn()
+    {
+        
+    }
     
 }

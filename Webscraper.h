@@ -35,6 +35,7 @@ namespace project{
             void getStockData();
             void getIWVData();
             void createStockMap(string filename);
+            void clearGroupStockMap();
         
     };
 }

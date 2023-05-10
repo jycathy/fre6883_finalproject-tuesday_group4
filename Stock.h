@@ -36,8 +36,8 @@ namespace project {
             void setGroup(string group_) {group = group_;}
             
             string getTicker() {return ticker;}
-            vector<double> getPrice();
-            vector<double> getCumulativeReturn();
+            vector<double> getPrice() {return Price;}
+            vector<double> getCumulativeReturn() {return Cumulative_Return;}
             string getAnnoucementDate() { return announcement_date;}
             
             void printInfo()    // for test

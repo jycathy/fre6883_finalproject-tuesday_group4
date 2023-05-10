@@ -14,6 +14,7 @@ namespace project {
         private:
             string ticker;
             vector<double> Price;
+            vector<double> Daily_Return;
             vector<double> Cumulative_Return;
             string start_date;
             string end_date;
@@ -31,8 +32,7 @@ namespace project {
             
             void setStartDate(string date_) { start_date = date_; }
             void setEndDate(string date_) { end_date = date_; }
-            void setPrice(vector<double> prices_) { Price = prices_; }
-            void setCumulativeReturn();
+            void setPrice(vector<double> prices_);
             void setGroup(string group_) {group = group_;}
             
             string getTicker() {return ticker;}
@@ -40,9 +40,28 @@ namespace project {
             vector<double> getCumulativeReturn() {return Cumulative_Return;}
             string getAnnoucementDate() { return announcement_date;}
             
+            void calDailyReturn();
+            void calCumulativeReturn();
+            
             void printInfo()    // for test
             {
-                cout<<ticker<<" "<<start_date<<" "<<end_date<<endl;
+                cout<<ticker<<endl;
+                int m = Price.size();
+                for(int i=0; i<m; i++)
+                {
+                    cout<<Price[i]<<" ";
+                }
+                cout<<endl;
+                for(int j=0; j<m-1; j++)
+                {
+                    cout<<Daily_Return[j]<<" ";
+                }
+                cout<<endl;
+                for(int k=0; k<m-1; k++)
+                {
+                    cout<<Cumulative_Return[k]<<" ";
+                }
+                cout<<endl;
             }
             
             // not implemented

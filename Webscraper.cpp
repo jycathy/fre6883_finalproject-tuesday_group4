@@ -204,6 +204,8 @@ namespace project{
 	    		string startdate = GetStartDate(Date, non_const_symbol, trading_dates, N); //每支股票起始日
 	    		string enddate = GetEndDate(Date, non_const_symbol, trading_dates, N);   //每支股票结束日
 	    		
+	    		auto it = StockMap.find(symbol);
+	    		if(it == StockMap.end()) {cout<<"stock not found in stockMap"<<endl;}
 	    		StockMap[symbol]->setStartDate(startdate);
 	    		StockMap[symbol]->setEndDate(enddate);
 	    		StockMap[symbol]->setGroup(group_name);
@@ -259,8 +261,10 @@ namespace project{
 	    		matrix.push_back(row); 
 	    		row.clear();
 	    		StockMap[symbol]->setPrice(price);
-	    		//StockMap[symbol]->printInfo();
+	    		StockMap[symbol]->calCumulativeReturn(); //calculate daily return and cumulative return once get price date
+	    		StockMap[symbol]->printInfo(); // for test use
 	    		(*pMap)[symbol] = StockMap[symbol];
+	    		//cout<<"checkpoint"<<endl;
 	/*
 	将adjusted close存入matrix， matrix中都为string,计算的时候得先转换为double
 	如果需要日期信息，可以通过前面的起始结束日期来调用
@@ -434,10 +438,9 @@ namespace project{
 	void Webscraper::clearGroupStockMap()
 	// initiate group stock maps
 	{
-		map<string, Stock_info*> newMap;
-		BeatStockMap = newMap;
-		BeatStockMap = newMap;
-		BeatStockMap = newMap;
+		BeatStockMap.clear();
+		MeetStockMap.clear();
+		MissStockMap.clear();
 	}
 
 }

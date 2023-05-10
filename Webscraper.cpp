@@ -265,10 +265,7 @@ namespace project{
 	    		StockMap[symbol]->printInfo(); // for test use
 	    		(*pMap)[symbol] = StockMap[symbol];
 	    		//cout<<"checkpoint"<<endl;
-	/*
-	将adjusted close存入matrix， matrix中都为string,计算的时候得先转换为double
-	如果需要日期信息，可以通过前面的起始结束日期来调用
-	*/
+
 			}
 			
 			cout<<group_name<<"StockMap created!"<<endl;
@@ -300,7 +297,7 @@ namespace project{
 	
 	
 	
-	void Webscraper::getIWVData() // 这里还没有管,因为不知道日期那里怎么搞
+	void Webscraper::getIWVData(string startdate, string enddate) // 这里还没有管,因为不知道日期那里怎么搞
 	{
 	
 		// file pointer to create file that store the data  
@@ -325,11 +322,13 @@ namespace project{
 			string url_common = "https://eodhistoricaldata.com/api/eod/";
 			string api_token = "644dd3c5307e07.87085785"; 
 			
+			iwv.clearData(); // clear date_list and price before write
+			vector<string> output_dates;
+			vector<double> output_prices;
+			
 			struct MemoryStruct data;
 			data.memory = NULL;
 			data.size = 0;
-			string startdate = "2023-03-01";
-			string enddate = "2023-03-10";
 	
 			string symbol = "IWV";
 			string url_request = url_common + symbol + ".US?" + "from=" + startdate + "&to=" + enddate + "&api_token=" + api_token + "&period=d";
@@ -365,19 +364,25 @@ namespace project{
 				double dValue = 0;
 				double sum = 0;
 				string line;
-				cout << symbol << endl;
+				//cout << symbol << endl;
 				while (getline(sData, line)) {
 					size_t found = line.find('-');
 					if (found != std::string::npos)
 					{
-						cout << line << endl;
+						//cout << line << endl;
 						sDate = line.substr(0, line.find_first_of(','));
 						line.erase(line.find_last_of(','));
 						sValue = line.substr(line.find_last_of(',') + 1);
 						dValue = strtod(sValue.c_str(), NULL);
-						cout << sDate << " " << std::fixed << ::setprecision(6) << dValue << endl;
+						//cout << sDate << " " << std::fixed << ::setprecision(6) << dValue << endl;
+						output_dates.push_back(sDate);
+						output_prices.push_back(dValue);
 					}	
 				}
+				
+				iwv.set_all_dates(output_dates);
+				iwv.set_Price(output_prices);
+				iwv.printTest();
 				
 				free(data.memory);
 				data.size = 0;
@@ -449,7 +454,8 @@ int main()
 {
     project::Webscraper Scraper(10);
     Scraper.createStockMap("Russell3000EarningsAnnouncements.csv");
-    Scraper.getStockData();
+    //Scraper.getStockData();
+    Scraper.getIWVData("2023-03-01","2023-03-10");
 }
 
 /*

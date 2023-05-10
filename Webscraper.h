@@ -22,6 +22,7 @@ namespace project{
             map<string, Stock_info*> BeatStockMap;
             map<string, Stock_info*> MissStockMap;
             map<string, Stock_info*> MeetStockMap;
+            ETF iwv;
         
         public:
             Webscraper(int N_)
@@ -33,7 +34,7 @@ namespace project{
             string GetStartDate(map<string,string> &Date,string &symbol, vector<string> &trading_dates, int N);
             string GetEndDate(map<string,string> &Date,string &symbol, vector<string> &trading_dates, int N);
             void getStockData();
-            void getIWVData();
+            void getIWVData(string startdate, string enddate);
             void createStockMap(string filename);
             void clearGroupStockMap();
         

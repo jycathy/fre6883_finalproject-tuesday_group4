@@ -61,4 +61,10 @@ namespace project{
         }
     }
     
+    void ETF::clearData()
+    {
+        all_dates.clear();
+        Price.clear();
+    }
+    
 }

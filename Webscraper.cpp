@@ -366,7 +366,7 @@ void Webscraper::getIWVData() // 这里还没有管,因为不知道日期那里�
 
 int main()
 {
-    project::Webscraper Scraper(5);
+    project::Webscraper Scraper(60);
     Scraper.getStockData();
 }
 

@@ -47,7 +47,6 @@ namespace project {
             vector<double> Daily_Return;
             vector<double> Cumulative_Return;
             vector<double> Abnormal_Return;
-            ETF etf;
             
             string start_date;
             string end_date;
@@ -72,6 +71,7 @@ namespace project {
             string getTicker() {return ticker;}
             vector<double> getPrice() {return Price;}
             vector<double> getCumulativeReturn() {return Cumulative_Return;}
+            vector<double> getAbnormalReturn() {return Abnormal_Return;}
             string getAnnoucementDate() { return announcement_date;}
             
             void calDailyReturn();

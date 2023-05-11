@@ -382,7 +382,7 @@ namespace project{
 				iwv.set_all_dates(output_dates);
 				iwv.set_Price(output_prices);
 				cout<<"IWV data loaded!"<<endl;
-				//iwv.printTest();
+				iwv.printTest();
 				//iwv.get_corresponding_price("2023-03-03","2023-03-09");
 				//iwv.get_corresponding_return("2023-03-03","2023-03-09");
 				

@@ -1,4 +1,5 @@
 #include "Stock.h"
+#include "OperatorOverloading.h"
 #include <iostream>
 #include <vector>
 #include <cmath>
@@ -41,16 +42,13 @@ namespace project{
         }
     }
     
-    void Stock_info::calAbnormalReturn()
+    void Stock_info::calAbnormalReturn(ETF etf, string startDate, string endDate)
     {
         Abnormal_Return.clear();
         this->calDailyReturn();
         int n = Daily_Return.size();
         Abnormal_Return.resize(n);
-        for (int i=0; i<n; i++)
-        {
-            Abnormal_Return[i] = Daily_Return[i] - 0.03;//change 0.03 to IWV corresponding return
-        }
+        Abnormal_Return = Daily_Return- etf.get_corresponding_return(startDate, endDate);
     }
     
     

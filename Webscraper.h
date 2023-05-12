@@ -12,6 +12,7 @@
 #include "curl/curl.h"
 
 #include "Stock.h"
+#include "Bootstrapping.h"
 
 using namespace std;
 namespace project{
@@ -33,6 +34,10 @@ namespace project{
             std::vector<string> GetTradingDays();
             string GetStartDate(map<string,string> &Date,string &symbol, vector<string> &trading_dates, int N);
             string GetEndDate(map<string,string> &Date,string &symbol, vector<string> &trading_dates, int N);
+            map<string, Stock_info*> GetBeatStockMap() {return BeatStockMap;}
+            map<string, Stock_info*> GetMissStockMap() {return MissStockMap;}
+            map<string, Stock_info*> GetMeetStockMap() {return MeetStockMap;}
+            
             void getStockData();
             void getIWVData(string startdate, string enddate);
             void createStockMap(string filename);

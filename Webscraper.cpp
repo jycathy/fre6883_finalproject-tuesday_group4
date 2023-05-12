@@ -12,6 +12,7 @@
 #include "Webscraper.h"
 
 using namespace std;
+
 namespace project{
 	StockGroups groups;
 	
@@ -173,7 +174,7 @@ namespace project{
 			this->clearGroupStockMap();  // each time reset N and scrap data, clear group stockMap
 			
 			for (int i = 1; i <= 3; i++){
-			cout << "Size of group " << i << ": " << groups.getGroup(i).size() << endl;
+			cout << "Fetching group " << i << ": " << endl;
 			vector<string> currentGroup = groups.getGroup(i);
 			string group_name;
 			map<string, Stock_info*> *pMap;
@@ -275,7 +276,7 @@ namespace project{
 
 			}
 			
-			cout<<group_name<<"StockMap created!"<<endl;
+			cout<<group_name<<"StockMap created with size of "<<(*pMap).size()<<endl;
 			
 			fp = fopen(resultfilename, "ab");
 				//打印矩阵
@@ -475,10 +476,31 @@ namespace project{
 
 int main()
 {
-    project::Webscraper Scraper(1);
+    project::Webscraper Scraper(10);
     Scraper.createStockMap("Russell3000EarningsAnnouncements.csv");
     Scraper.getIWVData("2022-08-01","2023-04-06");
     Scraper.getStockData();
+    
+    project::Matrix beatARmatrix = createStockARmtx(Scraper.GetBeatStockMap());
+    vector<double> beatAAR = project::calculateAAR(beatARmatrix);
+    vector<double>::iterator itr;
+    for(vector<double>::iterator itr=beatAAR.begin(); itr!=beatAAR.end(); itr++)
+    {
+    	cout<<*itr<<" ";
+    }
+    cout<<endl;
+    
+    /*
+    int m = beatARmatrix.size();
+    vector<double>::iterator itr;
+    for(int i=0; i<m; i++)
+    {
+        for(itr=beatARmatrix[i].begin(); itr!=beatARmatrix[i].end(); itr++)
+        {cout<< *itr << " ";}
+        cout<<endl;
+    }
+    */
+    
     
 	
 }

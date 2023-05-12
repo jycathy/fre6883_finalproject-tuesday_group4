@@ -275,7 +275,7 @@ namespace project{
 
 			}
 			
-			cout<<group_name<<"StockMap created!"<<endl;
+			cout<<group_name<<"StockMap created with "<<(*pMap).size()<<endl;
 			
 			fp = fopen(resultfilename, "ab");
 				//打印矩阵
@@ -475,9 +475,9 @@ namespace project{
 
 int main()
 {
-    project::Webscraper Scraper(1);
+    project::Webscraper Scraper(60);
     Scraper.createStockMap("Russell3000EarningsAnnouncements.csv");
-    Scraper.getIWVData("2022-08-01","2023-04-06");
+    Scraper.getIWVData("2022-01-03","2023-05-04");
     Scraper.getStockData();
     
 	

@@ -177,6 +177,7 @@ namespace project{
 			vector<string> currentGroup = groups.getGroup(i);
 			string group_name;
 			map<string, Stock_info*> *pMap;
+			
 			if (i == 1)
 			{	
 				strcpy(resultfilename, "beatEstimateGroup.txt");
@@ -195,14 +196,14 @@ namespace project{
 				group_name = "Miss";
 				pMap = &MissStockMap;
 			}
-			
+
 			std::vector<std::vector<string>> matrix;
 			std::vector<string> row;
 			for (const string& symbol : currentGroup) {
 				string non_const_symbol = symbol;
 	    		string startdate = GetStartDate(Date, non_const_symbol, trading_dates, N); //每支股票起始日
 	    		string enddate = GetEndDate(Date, non_const_symbol, trading_dates, N);   //每支股票结束日
-	    		
+
 	    		auto it = StockMap.find(symbol);
 	    		if(it == StockMap.end()) {cout<<"stock not found in stockMap"<<endl;}
 	    		StockMap[symbol]->setStartDate(startdate);
@@ -265,8 +266,7 @@ namespace project{
 	    		StockMap[symbol]->calCumulativeReturn(); //calculate cumulative return once get price date
 	    		//StockMap[symbol]->printInfo(); // for test use
 	    		(*pMap)[symbol] = StockMap[symbol];
-	    		//(*pMap)[symbol]->printInfo(); 
-	    		//cout<<"checkpoint"<<endl;
+	    		cout<<symbol<<endl;
 
 			}
 			

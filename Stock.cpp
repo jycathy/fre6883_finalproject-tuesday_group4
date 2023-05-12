@@ -32,10 +32,11 @@ namespace project{
     void Stock_info::calCumulativeReturn()
     {
         Cumulative_Return.clear();
-        this->calDailyReturn();  // calculate daily return before calculate cumulative return
+        //this->calDailyReturn();  // calculate daily return before calculate cumulative return
         int n = Daily_Return.size();
         Cumulative_Return.resize(n);
-        Cumulative_Return.push_back(Daily_Return[0]);
+        //cout<<Daily_Return[0]<<endl;
+        Cumulative_Return[0] = Daily_Return[0];
         for (int i=1; i<n; i++)
         {
             Cumulative_Return[i] = Cumulative_Return[i-1] + Daily_Return[i];

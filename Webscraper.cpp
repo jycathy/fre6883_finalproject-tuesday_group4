@@ -259,10 +259,13 @@ namespace project{
 	    		}
 	    		matrix.push_back(row); 
 	    		row.clear();
+	    		if(StockMap.find(symbol)==StockMap.end()){ cout<<"stock not found in stockMap!"<<endl;}
 	    		StockMap[symbol]->setPrice(price);
-	    		StockMap[symbol]->calCumulativeReturn(); //calculate daily return and cumulative return once get price date
-	    		StockMap[symbol]->printInfo(); // for test use
+	    		StockMap[symbol]->calDailyReturn(); // always calculate daily return before calculating cumulative return
+	    		StockMap[symbol]->calCumulativeReturn(); //calculate cumulative return once get price date
+	    		//StockMap[symbol]->printInfo(); // for test use
 	    		(*pMap)[symbol] = StockMap[symbol];
+	    		//(*pMap)[symbol]->printInfo(); 
 	    		//cout<<"checkpoint"<<endl;
 
 			}
@@ -382,9 +385,7 @@ namespace project{
 				iwv.set_all_dates(output_dates);
 				iwv.set_Price(output_prices);
 				cout<<"IWV data loaded!"<<endl;
-				iwv.printTest();
-				//iwv.get_corresponding_price("2023-03-03","2023-03-09");
-				//iwv.get_corresponding_return("2023-03-03","2023-03-09");
+				//iwv.printTest();
 				
 				free(data.memory);
 				data.size = 0;
@@ -445,6 +446,21 @@ namespace project{
 	void Webscraper::clearGroupStockMap()
 	// initiate group stock maps
 	{
+		for (auto i : BeatStockMap)
+		{
+			delete i.second;
+			i.second = NULL;
+		}
+		for (auto i : MeetStockMap)
+		{
+			delete i.second;
+			i.second = NULL;
+		}
+		for (auto i : MissStockMap)
+		{
+			delete i.second;
+			i.second = NULL;
+		}
 		BeatStockMap.clear();
 		MeetStockMap.clear();
 		MissStockMap.clear();
@@ -454,10 +470,11 @@ namespace project{
 
 int main()
 {
-    project::Webscraper Scraper(10);
+    project::Webscraper Scraper(1);
     Scraper.createStockMap("Russell3000EarningsAnnouncements.csv");
-    //Scraper.getStockData();
-    Scraper.getIWVData("2023-03-01","2023-03-10");
+    //Scraper.getIWVData("2023-03-01","2023-03-10");
+    Scraper.getStockData();
+    
 	
 }
 

@@ -4,6 +4,7 @@
 #include <vector>
 #include <string>
 #include <ctime>
+#include <algorithm>
 
 #include "Bootstrapping.h"
 
@@ -22,6 +23,33 @@ namespace project{
         }
         
         return ARmtx;
+    }
+    
+    Matrix genSelectedARmtx(Matrix ARmtx, int M)     // randomly pick M AR and generate a M*2N matrix
+    {
+        int totalSize = ARmtx.size();   // total number of stocks
+        // generate indices of randomly picked stocks
+        vector<int> indices;
+        while ((int)indices.size() < M)
+        {
+            int index = rand() % totalSize;
+            //cout<<index<<" ";
+            
+            if (std::find(indices.begin(), indices.end(), index) == indices.end())
+            {
+                // Not in the indices. Add it
+                indices.push_back(index);
+            }
+        }
+        
+        Matrix mtx;
+        for (const int &index : indices)
+        {
+            mtx.push_back(ARmtx[index]);
+        }
+        //cout<<mtx.size()<<endl;
+        return mtx;
+        
     }
     
     vector<double> calculateAAR(const Matrix &ARit)
@@ -43,7 +71,7 @@ namespace project{
         int N = AAR.size();      // 2N days
         vector<double> result(N);
         
-        for (unsigned long i = 0; i < N; i++)
+        for (int i = 0; i < N; i++)
         {
             tot += AAR[i];
             result[i] = tot;

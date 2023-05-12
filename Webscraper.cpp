@@ -174,7 +174,7 @@ namespace project{
 			this->clearGroupStockMap();  // each time reset N and scrap data, clear group stockMap
 			
 			for (int i = 1; i <= 3; i++){
-			cout << "Fetching group " << i << ": " << endl;
+			cout << "Fetching group " << i << " ..." << endl;
 			vector<string> currentGroup = groups.getGroup(i);
 			string group_name;
 			map<string, Stock_info*> *pMap;
@@ -299,7 +299,6 @@ namespace project{
 	
 		// release resources acquired by curl_global_init() 
 		curl_global_cleanup();
-	
 	}
 	
 	
@@ -410,7 +409,6 @@ namespace project{
 		// release resources acquired by curl_global_init() 
 		curl_global_cleanup();
 	
-	    
 	}
 	
 	void Webscraper::createStockMap(string filename)
@@ -482,18 +480,21 @@ int main()
     Scraper.getStockData();
     
     project::Matrix beatARmatrix = createStockARmtx(Scraper.GetBeatStockMap());
-    vector<double> beatAAR = project::calculateAAR(beatARmatrix);
+    
+    int M=80; // randomly pick 80 stocks from beat group
+    project::Matrix selectedBeatARmatrix = project::genSelectedARmtx(beatARmatrix,M);
+    vector<double> beatAAR = project::calculateAAR(selectedBeatARmatrix);
     vector<double> beatCAAR = project::calculateCAAR(beatAAR);
     
     
     
-    
+    cout<<"beat group AAR"<<endl;
     for(vector<double>::iterator itr=beatAAR.begin(); itr!=beatAAR.end(); itr++)
     {
     	cout<<*itr<<" ";
     }
-    cout<<endl<<endl;
-    
+    cout<<endl;
+    cout<<"beat group CAAR"<<endl;
     for(vector<double>::iterator itr=beatCAAR.begin(); itr!=beatCAAR.end(); itr++)
     {
     	cout<<*itr<<" ";

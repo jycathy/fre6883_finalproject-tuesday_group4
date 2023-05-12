@@ -36,4 +36,19 @@ namespace project{
         
         return AAR/M;
     }
+    
+    vector<double> calculateCAAR(const vector<double> &AAR)
+    {
+        double tot = 0.;
+        int N = AAR.size();      // 2N days
+        vector<double> result(N);
+        
+        for (unsigned long i = 0; i < N; i++)
+        {
+            tot += AAR[i];
+            result[i] = tot;
+        }
+        
+        return result;
+    }
 }

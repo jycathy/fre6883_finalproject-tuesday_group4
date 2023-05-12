@@ -17,6 +17,7 @@ namespace project {
     Matrix createStockARmtx(map<string, Stock_info*> stock_map);
     
     vector<double> calculateAAR(const Matrix &ARit);
+    vector<double> calculateCAAR(const vector<double> &AAR);
     
     
     

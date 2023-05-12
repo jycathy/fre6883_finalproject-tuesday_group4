@@ -476,19 +476,30 @@ namespace project{
 
 int main()
 {
-    project::Webscraper Scraper(60);
+    project::Webscraper Scraper(5);
     Scraper.createStockMap("Russell3000EarningsAnnouncements.csv");
     Scraper.getIWVData("2022-01-03","2023-05-04");
     Scraper.getStockData();
     
     project::Matrix beatARmatrix = createStockARmtx(Scraper.GetBeatStockMap());
     vector<double> beatAAR = project::calculateAAR(beatARmatrix);
-    vector<double>::iterator itr;
+    vector<double> beatCAAR = project::calculateCAAR(beatAAR);
+    
+    
+    
+    
     for(vector<double>::iterator itr=beatAAR.begin(); itr!=beatAAR.end(); itr++)
     {
     	cout<<*itr<<" ";
     }
+    cout<<endl<<endl;
+    
+    for(vector<double>::iterator itr=beatCAAR.begin(); itr!=beatCAAR.end(); itr++)
+    {
+    	cout<<*itr<<" ";
+    }
     cout<<endl;
+    
     
     /*
     int m = beatARmatrix.size();

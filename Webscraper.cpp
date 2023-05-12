@@ -276,7 +276,11 @@ namespace project{
 
 			}
 			
+<<<<<<< HEAD
 			cout<<group_name<<"StockMap created with size of "<<(*pMap).size()<<endl;
+=======
+			cout<<group_name<<"StockMap created with "<<(*pMap).size()<<endl;
+>>>>>>> 092dbe146c0917426c1178303f84a7c1e657a333
 			
 			fp = fopen(resultfilename, "ab");
 				//打印矩阵
@@ -476,9 +480,13 @@ namespace project{
 
 int main()
 {
+<<<<<<< HEAD
     project::Webscraper Scraper(10);
+=======
+    project::Webscraper Scraper(60);
+>>>>>>> 092dbe146c0917426c1178303f84a7c1e657a333
     Scraper.createStockMap("Russell3000EarningsAnnouncements.csv");
-    Scraper.getIWVData("2022-08-01","2023-04-06");
+    Scraper.getIWVData("2022-01-03","2023-05-04");
     Scraper.getStockData();
     
     project::Matrix beatARmatrix = createStockARmtx(Scraper.GetBeatStockMap());

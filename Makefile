@@ -1,16 +1,16 @@
 CC = g++
 CFLAGS = -Wall -ggdb3 -std=c++11 -lcurl
 
-main: main.o Webscraper.o Grouping.o Stock.o OperatorOverloading.o
-	$(CC) $(CFLAGS) -o main main.o Webscraper.o Grouping.o Stock.o OperatorOverloading.o
+main: main.o Webscraper.o Grouping.o Stock.o OperatorOverloading.o GnuPlot.o
+	$(CC) $(CFLAGS) -o main main.o Webscraper.o Grouping.o Stock.o OperatorOverloading.o GnuPlot.o
 	
-# Webscraper: Webscraper.o Grouping.o Stock.o OperatorOverloading.o Bootstrapping.o
-# 	$(CC) $(CFLAGS) -o Webscraper Webscraper.o Grouping.o Stock.o OperatorOverloading.o Bootstrapping.o
+# Webscraper: Webscraper.o Grouping.o Stock.o OperatorOverloading.o Bootstrapping.o GnuPlot.o
+# 	$(CC) $(CFLAGS) -o Webscraper Webscraper.o Grouping.o Stock.o OperatorOverloading.o Bootstrapping.o GnuPlot.o
 
 Webscraper.o: Webscraper.cpp Webscraper.h Grouping.h Stock.h OperatorOverloading.h Bootstrapping.h
 	$(CC) $(CFLAGS) -c Webscraper.cpp
 
-Bootstrapping.o: Bootstrapping.cpp Bootstrapping.h OperatorOverloading.h Stock.h
+Bootstrapping.o: Bootstrapping.cpp Bootstrapping.h OperatorOverloading.h Stock.h 
 	$(CC) $(CFLAGS) -c Bootstrapping.cpp
 
 Grouping.o: Grouping.cpp Grouping.h
@@ -22,5 +22,8 @@ Stock.o: Stock.cpp Stock.h
 OperatorOverloading.o: OperatorOverloading.cpp OperatorOverloading.h
 	$(CC) $(CFLAGS) -c OperatorOverloading.cpp
 
+GnuPlot.o: GnuPlot.cpp GnuPlot.h
+	$(CC) $(CFLAGS) -c GnuPlot.cpp
+
 clean:
-	rm -rf Webscraper *.o Grouping *.o Stock *.o OperatorOverloading *.o Bootstrapping.o
+	rm -rf Webscraper *.o Grouping *.o Stock *.o OperatorOverloading *.o Bootstrapping *.o GnuPlot *.o

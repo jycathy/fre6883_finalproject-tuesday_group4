@@ -6,23 +6,23 @@ namespace project{
     class GnuPlot
     {
     private:
-        vector<double> CAAR1;
-        vector<double> CAAR2;
-        vector<double> CAAR3;
+        vector<double> yData1;
+        vector<double> yData2;
+        vector<double> yData3;
         int dataSize;
         
     public:
         GnuPlot(const vector<double> &yData1_, const vector<double> &yData2_, const vector<double> &yData3_)
         {
-            CAAR1 = CAAR1_;
-            CAAR2 = CAAR2_;
-            CAAR3 = CAAR3_;
-            dataSize = CAAR1_.size();
+            yData1 = yData1_;
+            yData2 = yData2_;
+            yData3 = yData3_;
+            dataSize = yData1_.size();
         }
         ~GnuPlot(){}
-        vector<double> GetData1(){return CAAR1;}
-        vector<double> GetData2(){return CAAR2;}
-        vector<double> GetData3(){return CAAR3;}
+        vector<double> GetData1(){return yData1;}
+        vector<double> GetData2(){return yData2;}
+        vector<double> GetData3(){return yData3;}
         void plotResults() const;
     };
 }

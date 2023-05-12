@@ -1,8 +1,11 @@
 CC = g++
 CFLAGS = -Wall -ggdb3 -std=c++11 -lcurl
 
-Webscraper: Webscraper.o Grouping.o Stock.o OperatorOverloading.o Bootstrapping.o
-	$(CC) $(CFLAGS) -o Webscraper Webscraper.o Grouping.o Stock.o OperatorOverloading.o Bootstrapping.o
+main: main.o Webscraper.o Grouping.o Stock.o OperatorOverloading.o
+	$(CC) $(CFLAGS) -o main main.o Webscraper.o Grouping.o Stock.o OperatorOverloading.o
+	
+# Webscraper: Webscraper.o Grouping.o Stock.o OperatorOverloading.o Bootstrapping.o
+# 	$(CC) $(CFLAGS) -o Webscraper Webscraper.o Grouping.o Stock.o OperatorOverloading.o Bootstrapping.o
 
 Webscraper.o: Webscraper.cpp Webscraper.h Grouping.h Stock.h OperatorOverloading.h Bootstrapping.h
 	$(CC) $(CFLAGS) -c Webscraper.cpp

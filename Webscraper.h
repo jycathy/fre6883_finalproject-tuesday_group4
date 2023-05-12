@@ -38,7 +38,10 @@ namespace project{
             map<string, Stock_info*> GetMissStockMap() {return MissStockMap;}
             map<string, Stock_info*> GetMeetStockMap() {return MeetStockMap;}
             
+            map<string, Stock_info*> GetStockMap() {return StockMap;}
+            
             void getStockData();
+            void setN(int N_) {N = N_;}
             void getIWVData(string startdate, string enddate);
             void createStockMap(string filename);
             void clearGroupStockMap();

@@ -269,7 +269,7 @@ namespace project{
 	    			StockMap[symbol]->setPrice(price);
 		    		StockMap[symbol]->calDailyReturn(); // always calculate daily return before calculating cumulative return
 		    		StockMap[symbol]->calCumulativeReturn(); //calculate cumulative return once get price date
-		    		// StockMap[symbol]->calAbnormalReturn(iwv);
+		    		StockMap[symbol]->calAbnormalReturn(iwv);
 		    		//StockMap[symbol]->printInfo(); // for test use
 		    		(*pMap)[symbol] = StockMap[symbol];
 	    		}

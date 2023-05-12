@@ -35,7 +35,7 @@ int main()
     // Scraper.getN();
     // Scraper.createStockMap("Russell3000EarningsAnnouncements.csv");
     //Scraper.getStockData();
-    // Scraper.getIWVData("2023-03-01","2023-03-10");
+    Scraper.getIWVData("2022-01-03","2023-05-04");
     
     
     

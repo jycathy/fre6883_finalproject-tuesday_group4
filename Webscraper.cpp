@@ -260,13 +260,18 @@ namespace project{
 	    		}
 	    		matrix.push_back(row); 
 	    		row.clear();
+	    		
 	    		if(StockMap.find(symbol)==StockMap.end()){ cout<<"stock not found in stockMap!"<<endl;}
-	    		StockMap[symbol]->setPrice(price);
-	    		StockMap[symbol]->calDailyReturn(); // always calculate daily return before calculating cumulative return
-	    		StockMap[symbol]->calCumulativeReturn(); //calculate cumulative return once get price date
-	    		//StockMap[symbol]->printInfo(); // for test use
-	    		(*pMap)[symbol] = StockMap[symbol];
-	    		cout<<symbol<<endl;
+	    		
+	    		if( price.size()== 2*N+1 )   // avoid segmentation fault
+	    		{
+	    			StockMap[symbol]->setPrice(price);
+		    		StockMap[symbol]->calDailyReturn(); // always calculate daily return before calculating cumulative return
+		    		StockMap[symbol]->calCumulativeReturn(); //calculate cumulative return once get price date
+		    		StockMap[symbol]->calAbnormalReturn(iwv);
+		    		//StockMap[symbol]->printInfo(); // for test use
+		    		(*pMap)[symbol] = StockMap[symbol];
+	    		}
 
 			}
 			
@@ -472,14 +477,8 @@ int main()
 {
     project::Webscraper Scraper(1);
     Scraper.createStockMap("Russell3000EarningsAnnouncements.csv");
-    //Scraper.getIWVData("2023-03-01","2023-03-10");
+    Scraper.getIWVData("2022-08-01","2023-04-06");
     Scraper.getStockData();
     
 	
 }
-
-/*
-现在分完了组，把日期的N搞定了，然后分组抓下来放进matrix里
-但是我们select和cleaning还有IWV还不知道该怎么弄，因为先弄下来的数据看着好像没有nan值，然后IWV是日期不知道怎么设置
-不过应该不影响后面矩阵的计算
-*/

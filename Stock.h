@@ -76,11 +76,12 @@ namespace project {
             
             void calDailyReturn();
             void calCumulativeReturn();
-            void calAbnormalReturn(ETF etf, string startDate, string endDate);
+            void calAbnormalReturn(ETF etf);
             
             void printInfo()    // for test
             {
                 cout<<ticker<<endl;
+                cout<<start_date<<" "<<end_date<<endl;
                 int m = Price.size();
                 for(int i=0; i<m; i++)
                 {
@@ -96,6 +97,12 @@ namespace project {
                 {
                     cout<<Cumulative_Return[k]<<" ";
                 }
+                cout<<endl;
+                for(int k=0; k<m-1; k++)
+                {
+                    cout<<Abnormal_Return[k]<<" ";
+                }
+                
                 cout<<endl;
             }
             

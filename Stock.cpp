@@ -43,17 +43,13 @@ namespace project{
         }
     }
     
-    void Stock_info::calAbnormalReturn(ETF etf, string startDate, string endDate)
+    void Stock_info::calAbnormalReturn(ETF etf)
     {
         Abnormal_Return.clear();
-        this->calDailyReturn();
         int n = Daily_Return.size();
         Abnormal_Return.resize(n);
-        Abnormal_Return = Daily_Return- etf.get_corresponding_return(startDate, endDate);
+        Abnormal_Return = Daily_Return - etf.get_corresponding_return(start_date, end_date);
     }
-    
-    
-    
     
     void ETF::set_all_dates(vector<string> dates_list)
     {

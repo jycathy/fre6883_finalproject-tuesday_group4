@@ -5,7 +5,39 @@
 #include "Stock.h"
 #include <chrono>
 #include <thread>
+#include "Bootstrapping.h"
 
+using namespace std;
+using namespace project;
+
+int main()
+{
+	Webscraper Scraper(60);
+	Scraper.createStockMap("Russell3000EarningsAnnouncements.csv");
+	Scraper.getIWVData("2022-01-03","2023-05-04");
+	Scraper.getStockData();
+	
+	Matrix resultForBeatGroup;
+	resultForBeatGroup = Bootstrapping(Scraper.GetBeatStockMap(), 80, 40);
+
+	int m = resultForBeatGroup.size();
+	int n = resultForBeatGroup[0].size();
+	for(int i=0;i<m;i++)
+	{
+		for(int j=0;j<n;j++)
+		{
+			cout<<resultForBeatGroup[i][j]<<" ";
+		}
+		cout<<endl;
+	}
+	cout<<endl;
+	return 0;
+}
+
+
+
+
+/*
 string validatestring(string tick)
 {
 	string t;
@@ -117,3 +149,5 @@ int main()
 	}
 	return 0;
 }
+
+*/

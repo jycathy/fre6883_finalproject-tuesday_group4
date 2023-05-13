@@ -1,4 +1,3 @@
-# pragma once
 #include <stdio.h>
 #include <iostream>
 #include <vector>
@@ -78,5 +77,54 @@ namespace project{
         }
         
         return result;
+    }
+    
+    Matrix Bootstrapping(map<string, Stock_info*> stock_map, int M, int N)    // select M stocks, repeat N times
+    {
+        Matrix resultMtx;
+        Matrix totalARmtx = createStockARmtx(stock_map);
+        int nofd = totalARmtx[0].size();  // number of days, i.e. 2N
+        cout<<nofd<<endl;
+        vector<double> AverageAAR(nofd,0.0), AAR_STD(nofd,0.0), AverageCAAR(nofd,0.0), CAAR_STD(nofd,0.0);
+        Matrix AARgenerated, CAARgenerated;
+        
+        for(int i=0; i<N; i++)
+        {
+            // select M stocks from totalATmtx
+            Matrix selectedARmtx = genSelectedARmtx(totalARmtx, M);
+            // calculate AAR of the group
+            vector<double> AAR = calculateAAR(selectedARmtx);
+            AARgenerated.push_back(AAR);
+            // calculate CAAR of the group
+            vector<double> CAAR = calculateCAAR(AAR);
+            CAARgenerated.push_back(CAAR);
+            // Average AAR
+            AverageAAR = (i * AverageAAR + AAR) / (i + 1);
+            // Average CAAR
+            AverageCAAR = calculateCAAR(AverageAAR);
+        }
+        
+        resultMtx.push_back(AverageAAR);
+        
+        // calculate AAR STD
+        for(int i=0; i<N; i++)
+        {
+            AAR_STD = (i * AAR_STD + ((AARgenerated[i] - AverageAAR) * (AARgenerated[i] - AverageAAR))) / (i + 1);
+        }
+        
+        resultMtx.push_back(AAR_STD);
+        
+        resultMtx.push_back(AverageCAAR);
+        
+        // calculate CAAR STD
+        for(int i=0; i<N; i++)
+        {
+            CAAR_STD = (i * CAAR_STD + ((CAARgenerated[i] - AverageCAAR) * (CAARgenerated[i] - AverageCAAR))) / (i + 1);
+        }
+        
+        resultMtx.push_back(CAAR_STD);
+        
+        return resultMtx;
+        
     }
 }

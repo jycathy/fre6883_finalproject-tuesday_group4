@@ -21,7 +21,7 @@ namespace project {
     vector<double> calculateAAR(const Matrix &ARit);
     vector<double> calculateCAAR(const vector<double> &AAR);
     
-    
+    Matrix Bootstrapping(map<string, Stock_info*> stock_map, int M, int N);
     
     
 }

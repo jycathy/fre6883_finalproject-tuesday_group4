@@ -110,4 +110,23 @@ namespace project{
         return returns;
     }
     
+    void Stock_info::pullInfo()
+    {
+        std::cout << "Ticker: " << getTicker() << endl;
+        std::cout << "Group: " << group << endl;
+        std::cout << "Earning Announcement Date: " << announcement_date << endl;
+        std::cout << "Period Ending: " << ending << endl;
+        std::cout << "Estimated: " << estimate << endl;
+        std::cout << "Reported earnings: " << reported << endl;
+        std::cout << "Surprise: " << surprise << endl;
+        std::cout << "Surprise %: " << surprise_ratio << endl;
+        cout << endl;
+        std::cout << "Stock Daily Prices: " << endl;
+        printVector(getPrice());
+        cout << endl; 
+        std::cout << "Stock Cumulative Daily Returns: " << endl;
+        printVector(getCumulativeReturn());
+        
+    }
+    
 }

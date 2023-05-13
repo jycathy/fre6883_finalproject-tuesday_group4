@@ -276,17 +276,17 @@ namespace project{
 
 			}
 			
-			cout<<group_name<<"StockMap created with size of "<<(*pMap).size()<<endl;
+			// cout<<group_name<<"StockMap created with size of "<<(*pMap).size()<<endl;
 			
-			fp = fopen(resultfilename, "ab");
-				//打印矩阵
-	    		for (const auto &row : matrix) {
-	        		for (const auto &element : row) {
-	            		fprintf(fp, "%s ", element.c_str());
-	        	}
-	        	 fprintf(fp, "\n");
-				}
-				fclose(fp);
+			// fp = fopen(resultfilename, "ab");
+			// 	//打印矩阵
+	  //  		for (const auto &row : matrix) {
+	  //      		for (const auto &element : row) {
+	  //          		fprintf(fp, "%s ", element.c_str());
+	  //      	}
+	  //      	 fprintf(fp, "\n");
+			// 	}
+			// 	fclose(fp);
 			}
 		}
 		else

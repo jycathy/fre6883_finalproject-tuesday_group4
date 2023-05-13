@@ -5,6 +5,7 @@
 #include <vector>
 #include <string>
 #include <ctime>
+#include <iomanip>
 
 using namespace std;
 
@@ -53,15 +54,16 @@ namespace project {
             string group;
             string announcement_date;
             string ending;
-            string estimated;
-            string earnings;
+            string estimate;
+            string reported;
+            // string earnings;
             string surprise;
             string surprise_ratio;
         
         public:
             
-            Stock_info(string ticker_, string date_, string ending_, string estimated_, string earnings_, string surprise_, 
-                string surprise_ratio_):ticker(ticker_), announcement_date(date_), ending(ending_), surprise(surprise_), surprise_ratio(surprise_ratio_) {}
+            Stock_info(string ticker_, string date_, string ending_, string estimate_, string reported_, string surprise_, 
+                string surprise_ratio_):ticker(ticker_), estimate(estimate_), reported(reported_),announcement_date(date_), ending(ending_), surprise(surprise_), surprise_ratio(surprise_ratio_) {}
             
             void setStartDate(string date_) { start_date = date_; }
             void setEndDate(string date_) { end_date = date_; }
@@ -108,6 +110,16 @@ namespace project {
             
             // not implemented
             void pullInfo();
+            
+            int printVector(vector<double> V)
+            {
+                for(vector<double> :: iterator itr = V.begin(); itr != V.end(); itr++)
+                {
+                    cout << fixed << setprecision(8) << *itr << "  ";
+                }
+                cout << endl;
+	            return 0;
+            }
             
             
     };

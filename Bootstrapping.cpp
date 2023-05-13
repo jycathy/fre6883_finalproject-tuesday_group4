@@ -84,7 +84,7 @@ namespace project{
         Matrix resultMtx;
         Matrix totalARmtx = createStockARmtx(stock_map);
         int nofd = totalARmtx[0].size();  // number of days, i.e. 2N
-        cout<<nofd<<endl;
+        // cout<<nofd<<endl;
         vector<double> AverageAAR(nofd,0.0), AAR_STD(nofd,0.0), AverageCAAR(nofd,0.0), CAAR_STD(nofd,0.0);
         Matrix AARgenerated, CAARgenerated;
         

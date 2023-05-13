@@ -280,11 +280,12 @@ int main()
 		
 		case 4:
 		{
-			cout << "set private data" << endl;
+			cout << "Setting private data..." << endl;
 			gnuplot.setData1(finalMatrix[0][2]);
 			gnuplot.setData2(finalMatrix[1][2]);
 			gnuplot.setData3(finalMatrix[2][2]);
-			cout << "showing plot results" << endl;
+			gnuplot.setDataSize(finalMatrix[0][2].size())
+			cout << "Showing plot results:" << endl;
 			gnuplot.plotResults();
 			break;
 		}

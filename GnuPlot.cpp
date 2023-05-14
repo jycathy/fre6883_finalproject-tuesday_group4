@@ -16,13 +16,13 @@ namespace project{
         }
         
         FILE *gnuplotPipe,*tempDataFile;
-        const char *tempDataFileName1 = "Beat_Group";
-        const char *tempDataFileName2 = "Meet_Group";
-        const char *tempDataFileName3 = "Miss_Group";
+        const char *tempDataFileName1 = "Beat";
+        const char *tempDataFileName2 = "Meet";
+        const char *tempDataFileName3 = "Miss";
         
-        const char *title = "CAAR graph for 3 groups";
-        const char *xlabel = "Date";
-        const char *ylabel = "CAAR";
+        const char *title = "Avg CAAR for 3 groups";
+        const char *xlabel = "Announcement Date";
+        const char *ylabel = "Avg CAAR(%)";
         
         gnuplotPipe = popen("gnuplot -persist", "w");
         fprintf(gnuplotPipe, "set grid\n");
@@ -81,7 +81,7 @@ namespace project{
             // remove(tempDataFileName2);
             // remove(tempDataFileName3);
             
-            // fprintf(gnuplotPipe,"Plot Exited \n");
+            fprintf(gnuplotPipe,"Plot Exited \n");
         } 
         else 
         {        

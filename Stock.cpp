@@ -25,7 +25,7 @@ namespace project{
         int m = Price.size();
         for(int i=1; i < m; i++)
         {
-            Daily_Return.push_back(Price[i]/Price[i-1] - 1);
+            Daily_Return.push_back((Price[i]/Price[i-1] - 1)*100);
         }
     }
 
@@ -104,7 +104,7 @@ namespace project{
         int m = price.size();
         for(int i=1; i < m; i++)
         {
-            returns.push_back(price[i]/price[i-1] - 1);
+            returns.push_back((price[i]/price[i-1] - 1)*100);
         }
         
         return returns;

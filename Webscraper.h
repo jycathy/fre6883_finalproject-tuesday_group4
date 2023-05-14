@@ -40,7 +40,7 @@ namespace project{
             
             map<string, Stock_info*> GetStockMap() {return StockMap;}
             
-            void getStockData();
+            void getStockData(int i);
             void setN(int N_) {N = N_;}
             void getIWVData(string startdate, string enddate);
             void createStockMap(string filename);

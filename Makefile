@@ -1,5 +1,5 @@
 CC = g++
-CFLAGS = -Wall -ggdb3 -std=c++11 -lcurl
+CFLAGS = -Wall -ggdb3 -std=c++11 -lcurl -lpthread
 
 main: main.o Webscraper.o Grouping.o Stock.o OperatorOverloading.o GnuPlot.o Bootstrapping.o
 	$(CC) $(CFLAGS) -o main main.o Webscraper.o Grouping.o Stock.o OperatorOverloading.o GnuPlot.o Bootstrapping.o

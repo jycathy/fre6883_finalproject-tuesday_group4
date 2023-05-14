@@ -100,7 +100,13 @@ int main()
 				start = std::chrono::system_clock::now();
 				cout << "Now starting to populate the stock map: " << endl;
 				// Scraper.PopulateMultiThread();
-				Scraper.getStockData();
+				thread thread1(&Webscraper::getStockData,&Scraper,1);
+				thread thread2(&Webscraper::getStockData,&Scraper,2);
+				thread thread3(&Webscraper::getStockData, &Scraper,3);
+				thread1.join();
+				thread2.join();
+				thread3.join();
+				
 				end = std::chrono::system_clock::now();
 				cout << "Stock map completed!" << endl;
 				

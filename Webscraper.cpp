@@ -47,8 +47,8 @@ namespace project{
 	}
 	
 	
-	//////////////////////////////////////////////////////////////////////// 设置时间N
-	map<string,string> Webscraper::GetDate(map<string,string> &Date) //将时间转化成正规形式
+	//////////////////////////////////////////////////////////////////////// 
+	map<string,string> Webscraper::GetDate(map<string,string> &Date) //
 	{
 		map<string,string> month;
 		month["JAN"]="01";
@@ -140,7 +140,7 @@ namespace project{
 	
 	
 	////////////////////////////////////////////////////////////////////////
-	void Webscraper::getStockData() 
+	void Webscraper::getStockData(int i) 
 	{
 		groups.groupStocksBySurprisePercentage("Russell3000EarningsAnnouncements.csv");
 	
@@ -173,7 +173,7 @@ namespace project{
 			
 			this->clearGroupStockMap();  // each time reset N and scrap data, clear group stockMap
 			
-			for (int i = 1; i <= 3; i++){
+		
 			cout << "Fetching group " << i << " ..." << endl;
 			vector<string> currentGroup = groups.getGroup(i);
 			string group_name;
@@ -181,19 +181,19 @@ namespace project{
 			
 			if (i == 1)
 			{	
-				strcpy(resultfilename, "beatEstimateGroup.txt");
+			
 				group_name = "Beat";
 				pMap = &BeatStockMap;
 			}
 			if (i == 2)
 			{
-				strcpy(resultfilename, "meetEstimateGroup.txt");
+				
 				group_name = "Meet";
 				pMap = &MeetStockMap;
 			}
 			if (i == 3)
 			{
-				strcpy(resultfilename, "missEstimateGroup.txt");
+				
 				group_name = "Miss";
 				pMap = &MissStockMap;
 			}
@@ -276,18 +276,6 @@ namespace project{
 
 			}
 			
-			// cout<<group_name<<"StockMap created with size of "<<(*pMap).size()<<endl;
-			
-			// fp = fopen(resultfilename, "ab");
-			// 	
-	  //  		for (const auto &row : matrix) {
-	  //      		for (const auto &element : row) {
-	  //          		fprintf(fp, "%s ", element.c_str());
-	  //      	}
-	  //      	 fprintf(fp, "\n");
-			// 	}
-			// 	fclose(fp);
-			}
 		}
 		else
 		{

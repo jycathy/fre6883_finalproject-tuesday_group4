@@ -27,7 +27,7 @@ namespace project{
         void setData1(vector<double> yData1_){ yData1 = yData1_; }
         void setData2(vector<double> yData2_){ yData2 = yData2_; }
         void setData3(vector<double> yData3_){ yData3 = yData3_; }
-        void setDataSize(int size_){dataSize = size_};
+        void setDataSize(int size_){dataSize = size_;}
         void plotResults() const;
     };
 }

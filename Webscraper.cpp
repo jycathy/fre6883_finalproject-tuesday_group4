@@ -89,7 +89,7 @@ namespace project{
 	}
 	
 	
-	std::vector<string> Webscraper::GetTradingDays() //交易日历
+	std::vector<string> Webscraper::GetTradingDays() //trading dates
 	{
 		ifstream fin;
 	    fin.open("Trading_dates.csv");
@@ -104,7 +104,7 @@ namespace project{
 	    return trading_dates;
 	}
 	
-	//ea 前N天时间起始日
+	// N days before the announcement day
 	string Webscraper::GetStartDate(map<string,string> &Date, string &symbol, vector<string> &trading_dates, int N)
 	{
 	    auto it = find(trading_dates.begin(), trading_dates.end(), Date[symbol]);
@@ -121,7 +121,7 @@ namespace project{
 	    return trading_dates[new_index];
 	}
 	
-	//ea 后N天时间结束日
+	//N days after the announcement day
 	string Webscraper::GetEndDate(map<string,string> &Date, string &symbol, vector<string> &trading_dates, int N)
 	{
 	    auto it = find(trading_dates.begin(), trading_dates.end(), Date[symbol]);
@@ -140,7 +140,7 @@ namespace project{
 	
 	
 	////////////////////////////////////////////////////////////////////////
-	void Webscraper::getStockData() // 抓取数据
+	void Webscraper::getStockData() 
 	{
 		groups.groupStocksBySurprisePercentage("Russell3000EarningsAnnouncements.csv");
 	
@@ -202,8 +202,8 @@ namespace project{
 			std::vector<string> row;
 			for (const string& symbol : currentGroup) {
 				string non_const_symbol = symbol;
-	    		string startdate = GetStartDate(Date, non_const_symbol, trading_dates, N); //每支股票起始日
-	    		string enddate = GetEndDate(Date, non_const_symbol, trading_dates, N);   //每支股票结束日
+	    		string startdate = GetStartDate(Date, non_const_symbol, trading_dates, N); //starting date for each stock
+	    		string enddate = GetEndDate(Date, non_const_symbol, trading_dates, N);   //ending date for each stock
 
 	    		auto it = StockMap.find(symbol);
 	    		if(it == StockMap.end()) {cout<<"stock not found in stockMap"<<endl;}
@@ -279,7 +279,7 @@ namespace project{
 			// cout<<group_name<<"StockMap created with size of "<<(*pMap).size()<<endl;
 			
 			// fp = fopen(resultfilename, "ab");
-			// 	//打印矩阵
+			// 	
 	  //  		for (const auto &row : matrix) {
 	  //      		for (const auto &element : row) {
 	  //          		fprintf(fp, "%s ", element.c_str());
@@ -304,7 +304,7 @@ namespace project{
 	
 	
 	
-	void Webscraper::getIWVData(string startdate, string enddate) // 这里还没有管,因为不知道日期那里怎么搞
+	void Webscraper::getIWVData(string startdate, string enddate) 
 	{
 	
 		// file pointer to create file that store the data  
@@ -486,9 +486,7 @@ int main()
     project::Matrix selectedBeatARmatrix = project::genSelectedARmtx(beatARmatrix,M);
     vector<double> beatAAR = project::calculateAAR(selectedBeatARmatrix);
     vector<double> beatCAAR = project::calculateCAAR(beatAAR);
-    
-    
-    
+   
     cout<<"beat group AAR"<<endl;
     for(vector<double>::iterator itr=beatAAR.begin(); itr!=beatAAR.end(); itr++)
     {

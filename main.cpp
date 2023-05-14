@@ -88,7 +88,6 @@ int main()
 			cout << "Enter the number of the days: ";
 			cin >> N;
 			if (N < 60)
-			// if (N < 2)
 			{
 				cout << "The days to retrieve data should be at least 60" << endl;
 				continue;
@@ -166,7 +165,6 @@ int main()
 			int m = resultForBeatGroup.size(); // 4
 			int n = resultForBeatGroup[0].size();  // 2N
 			
-			// newMatrix finalMatrix(3);
 			
 			for(int i=0;i<3;i++)
 			{
@@ -284,7 +282,7 @@ int main()
 			gnuplot.setData1(finalMatrix[0][2]);
 			gnuplot.setData2(finalMatrix[1][2]);
 			gnuplot.setData3(finalMatrix[2][2]);
-			gnuplot.setDataSize(finalMatrix[0][2].size())
+			gnuplot.setDataSize(finalMatrix[0][2].size());
 			cout << "Showing plot results:" << endl;
 			gnuplot.plotResults();
 			break;

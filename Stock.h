@@ -108,7 +108,6 @@ namespace project {
                 cout<<endl;
             }
             
-            // not implemented
             void pullInfo();
             
             int printVector(vector<double> V)

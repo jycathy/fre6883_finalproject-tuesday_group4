@@ -34,17 +34,17 @@ namespace project{
         }
 
         file.close();
-        // Sort the stocks in descending order based on surprise percentage
+        // Sort the stocks in ascending order based on surprise percentage
         sort(stocks.begin(), stocks.end(), [](const Stock& a, const Stock& b) {
-            return a.surprise_percentage > b.surprise_percentage;
+            return a.surprise_percentage < b.surprise_percentage;
         });
 
         size_t size = stocks.size();
         size_t group_size = size / 3;
 
-        beatEstimateGroup.assign(stocks.begin(), stocks.begin() + group_size);
+        missEstimateGroup.assign(stocks.begin(), stocks.begin() + group_size);
         meetEstimateGroup.assign(stocks.begin() + group_size, stocks.begin() + group_size * 2);
-        missEstimateGroup.assign(stocks.begin() + group_size * 2, stocks.end());
+        beatEstimateGroup.assign(stocks.begin() + group_size * 2, stocks.end());
     }
     
     vector<Stock> StockGroups::printGroup(int groupNumber) const {

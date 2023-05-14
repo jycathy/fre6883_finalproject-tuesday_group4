@@ -7,9 +7,10 @@
 
 using namespace std;
 namespace project{
+    // Define Stock structure to hold stock data
     struct Stock {
-        string ticker;
-        double surprise_percentage;
+        string ticker; // Stock ticker
+        double surprise_percentage; // Surprise percentage of the stock
     };
 
     class StockGroups {
@@ -19,6 +20,7 @@ namespace project{
         std::vector<std::string> getGroup(int groupNumber) const;
 
     private:
+        // Vectors to hold each group of stocks
         std::vector<Stock> missEstimateGroup;
         std::vector<Stock> meetEstimateGroup;
         std::vector<Stock> beatEstimateGroup;

@@ -18,10 +18,10 @@ namespace project {
     Matrix createStockARmtx(map<string, Stock_info*> stock_map);  // generate AR matrix of all stocks from stock map
     Matrix genSelectedARmtx(Matrix ARmtx, int M);  // generate AR matrix of M randomly picked stocks from whole AR matrix
     
-    vector<double> calculateAAR(const Matrix &ARit);
-    vector<double> calculateCAAR(const vector<double> &AAR);
+    vector<double> calculateAAR(const Matrix &ARit);  // generate AAR vector from the AR matrix
+    vector<double> calculateCAAR(const vector<double> &AAR);  // generate CAAR vector from the AR matrix
     
-    Matrix Bootstrapping(map<string, Stock_info*> stock_map, int M, int N);
+    Matrix Bootstrapping(map<string, Stock_info*> stock_map, int M, int N);  // return the matrix of AAR, AAR_STD, CAAR, CAAR_STD
     
     
 }

@@ -49,6 +49,8 @@ namespace project{
 	
 	//////////////////////////////////////////////////////////////////////// 
 	map<string,string> Webscraper::GetDate(map<string,string> &Date) //
+	// convert the announcement from the format of '21-Nov-2022' to '2022-11-21'
+	// return a map, the key is the ticker and the value is the converted announcement date
 	{
 		map<string,string> month;
 		month["JAN"]="01";
@@ -106,49 +108,53 @@ namespace project{
 	
 	// N days before the announcement day
 	string Webscraper::GetStartDate(map<string,string> &Date, string &symbol, vector<string> &trading_dates, int N)
+	// given the map with tickers as keys and converted announcement dates as values, the ticker of the target stock, vector of all trading dates, N
+	// return the startDate of the target stock, which is N days before the announcement date
 	{
 	    auto it = find(trading_dates.begin(), trading_dates.end(), Date[symbol]);
 	    if (it == trading_dates.end()) 
 	    {
 	        return "";
 	    }
-	    int index = distance(trading_dates.begin(), it);
-	    int new_index = index - N;
+	    int index = distance(trading_dates.begin(), it);  // the index of the announcement date in the trading dates vector
+	    int new_index = index - N;  // the index of the startDate in the trading dates vector
 	    if (new_index < 0 || new_index >= trading_dates.size()) 
 	    {
 	        return "";
 	    }
-	    return trading_dates[new_index];
+	    return trading_dates[new_index];  // return the startDate
 	}
 	
 	//N days after the announcement day
 	string Webscraper::GetEndDate(map<string,string> &Date, string &symbol, vector<string> &trading_dates, int N)
+	// given the map with tickers as keys and converted announcement dates as values, the ticker of the target stock, vector of all trading dates, N
+	// return the endDate of the target stock, which is N days after the announcement date
 	{
 	    auto it = find(trading_dates.begin(), trading_dates.end(), Date[symbol]);
 	    if (it == trading_dates.end()) 
 	    {
 	        return "";
 	    }
-	    int index = distance(trading_dates.begin(), it);
-	    int new_index = index + N;
+	    int index = distance(trading_dates.begin(), it);  // the index of the announcement date in the trading dates vector
+	    int new_index = index + N;  // the index of the endDate in the trading dates vector
 	    if (new_index < 0 || new_index >= trading_dates.size()) 
 	    {
 	        return "";
 	    }
-	    return trading_dates[new_index];
+	    return trading_dates[new_index];  // return the endDate
 	}
 	
 	
 	////////////////////////////////////////////////////////////////////////
 	void Webscraper::getStockData(int i) 
 	{
-		groups.groupStocksBySurprisePercentage("Russell3000EarningsAnnouncements.csv");
+		groups.groupStocksBySurprisePercentage("Russell3000EarningsAnnouncements.csv");  // call the function to split the group
 	
 	    map<string, string> Date;
 	    vector<string> trading_dates;
 	    
 	    Date = GetDate(Date);
-	    trading_dates = GetTradingDays();
+	    trading_dates = GetTradingDays();  // all the trading dates
 		
 		// file pointer to create file that store the data  
 		FILE* fp;
@@ -175,10 +181,11 @@ namespace project{
 			
 		
 			cout << "Fetching group " << i << " ..." << endl;
-			vector<string> currentGroup = groups.getGroup(i);
+			vector<string> currentGroup = groups.getGroup(i);  // get the vector of tickers in this group
 			string group_name;
-			map<string, Stock_info*> *pMap;
+			map<string, Stock_info*> *pMap;  //initiate the pointer pointing to the subgroup stockMap
 			
+			// set the group_name and the pointer
 			if (i == 1)
 			{	
 			
@@ -205,8 +212,10 @@ namespace project{
 	    		string startdate = GetStartDate(Date, non_const_symbol, trading_dates, N); //starting date for each stock
 	    		string enddate = GetEndDate(Date, non_const_symbol, trading_dates, N);   //ending date for each stock
 
-	    		auto it = StockMap.find(symbol);
+	    		auto it = StockMap.find(symbol);  // locate the stock in the stockMap
 	    		if(it == StockMap.end()) {cout<<"stock not found in stockMap"<<endl;}
+	    		
+	    		// set the startDate, endDate, and group_name
 	    		StockMap[symbol]->setStartDate(startdate);
 	    		StockMap[symbol]->setEndDate(enddate);
 	    		StockMap[symbol]->setGroup(group_name);
@@ -256,7 +265,7 @@ namespace project{
 	    			sValue = line.substr(line.find_last_of(',') + 1);
 	    			row.push_back(sValue);
 	    			dValue = std::stod(sValue);
-	    			price.push_back(dValue);
+	    			price.push_back(dValue);  // set the price
 	    			}
 	    		}
 	    		matrix.push_back(row); 
@@ -271,7 +280,7 @@ namespace project{
 		    		StockMap[symbol]->calCumulativeReturn(); //calculate cumulative return once get price date
 		    		StockMap[symbol]->calAbnormalReturn(iwv);
 		    		//StockMap[symbol]->printInfo(); // for test use
-		    		(*pMap)[symbol] = StockMap[symbol];
+		    		(*pMap)[symbol] = StockMap[symbol];  // populate the stock into the subgroup
 	    		}
 
 			}
@@ -425,8 +434,8 @@ namespace project{
 					row.push_back(word);
 				}
 				
-				Stock_info* st = new Stock_info(row[0], row[1], row[2], row[3], row[4], row[5], row[6]);
-				StockMap.insert(pair<string, Stock_info*>(row[0], st));
+				Stock_info* st = new Stock_info(row[0], row[1], row[2], row[3], row[4], row[5], row[6]);  // create object
+				StockMap.insert(pair<string, Stock_info*>(row[0], st));  // populate the object into stockMap
 			}
 
 		}

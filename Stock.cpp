@@ -78,6 +78,7 @@ namespace project{
     }
     
     vector<double> ETF::get_corresponding_price(string startDate, string endDate)    // startDate and endDate must be trading date
+    // find the index of stock's startDate and endDate and push the IWV's price within the indices into the result vector
     {
         vector<double> temp;
         int m = all_dates.size();
@@ -98,6 +99,7 @@ namespace project{
     }
     
     vector<double> ETF::get_corresponding_return(string startDate, string endDate)
+    // call the get_corresponsing_price first and then calculate the return based on that
     {
         vector<double> price = this->get_corresponding_price(startDate, endDate);
         vector<double> returns;

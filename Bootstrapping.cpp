@@ -13,6 +13,7 @@ using namespace std;
 namespace project{
     
     Matrix createStockARmtx(map<string, Stock_info*> stock_map)
+    // given the subgroup stockMap, return the matrix of AR of each stock
     {
         Matrix ARmtx;
         map<string, Stock_info*>::iterator itr;
@@ -25,7 +26,7 @@ namespace project{
         return ARmtx;
     }
     
-    Matrix genSelectedARmtx(Matrix ARmtx, int M)     // randomly pick M AR and generate a M*2N matrix
+    Matrix genSelectedARmtx(Matrix ARmtx, int M)     // randomly pick M AR and generate a M*2N matrix of the AR
     {
         int totalSize = ARmtx.size();   // total number of stocks
         // generate indices of randomly picked stocks
@@ -53,6 +54,7 @@ namespace project{
     }
     
     vector<double> calculateAAR(const Matrix &ARit)
+    // calculate the Average AR of the AR matrix and return the vector AAR
     {
         int M = ARit.size();      // number of stocks
         int N = ARit[0].size();   // number of AR
@@ -66,6 +68,7 @@ namespace project{
     }
     
     vector<double> calculateCAAR(const vector<double> &AAR)
+    // calculate the Average CAAR of the AR matrix and return the vector CAAR
     {
         double tot = 0.;
         int N = AAR.size();      // 2N days
@@ -81,13 +84,14 @@ namespace project{
     }
     
     Matrix Bootstrapping(map<string, Stock_info*> stock_map, int M, int N)    // select M stocks, repeat N times
+    // return the matrix of (AAR, AAR_STD, CAAR, CAAR_STD)
     {
         Matrix resultMtx;
-        Matrix totalARmtx = createStockARmtx(stock_map);
+        Matrix totalARmtx = createStockARmtx(stock_map);  // generate the AR matrix of given stock_map
         int nofd = totalARmtx[0].size();  // number of days, i.e. 2N
         // cout<<nofd<<endl;
-        vector<double> AverageAAR(nofd,0.0), AAR_STD(nofd,0.0), AverageCAAR(nofd,0.0), CAAR_STD(nofd,0.0);
-        Matrix AARgenerated, CAARgenerated;
+        vector<double> AverageAAR(nofd,0.0), AAR_STD(nofd,0.0), AverageCAAR(nofd,0.0), CAAR_STD(nofd,0.0);  // initiate the result vectors
+        Matrix AARgenerated, CAARgenerated;  // initiate the AAR and CAAR matrix, which is used to store the AAR and CAAR of all samplings
         
         for(int i=0; i<N; i++)
         {

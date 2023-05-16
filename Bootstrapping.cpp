@@ -4,6 +4,7 @@
 #include <string>
 #include <ctime>
 #include <algorithm>
+#include <cmath>
 
 #include "Bootstrapping.h"
 
@@ -112,6 +113,12 @@ namespace project{
             AAR_STD = (i * AAR_STD + ((AARgenerated[i] - AverageAAR) * (AARgenerated[i] - AverageAAR))) / (i + 1);
         }
         
+        int aar_size = AAR_STD.size();
+        for(int i=0; i<aar_size; i++)
+        {
+            AAR_STD[i] = sqrt(AAR_STD[i]);
+        }
+        
         resultMtx.push_back(AAR_STD);
         
         resultMtx.push_back(AverageCAAR);
@@ -122,6 +129,11 @@ namespace project{
             CAAR_STD = (i * CAAR_STD + ((CAARgenerated[i] - AverageCAAR) * (CAARgenerated[i] - AverageCAAR))) / (i + 1);
         }
         
+        int caar_size = CAAR_STD.size();
+        for(int i=0; i<caar_size; i++)
+        {
+            CAAR_STD[i] = sqrt(CAAR_STD[i]);
+        }
         resultMtx.push_back(CAAR_STD);
         
         return resultMtx;
